@@ -1,5 +1,15 @@
 ﻿  main.cpp
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(28,17): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(80,23): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(80,19): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(30,17): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(105,40): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(107,182): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(107,128): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(107,89): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(107,51): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(108,21): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(108,16): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(124,14): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(143,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(144,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(145,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(146,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
   ToyRenderer.vcxproj -> E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\Debug\ToyRenderer.exe
