@@ -98,6 +98,14 @@ template<> struct vec<3> {
 
 /////////////////////////////////////////////////////////////////////////////////
 
+//template<> struct vec<4> {
+//    vec() = default;
+//    vec(double X, double Y, double Z, double W) : x(X), y(Y), z(Z), w(W) {}
+//    double x{}, y{}, z{},w{};
+//};
+
+/////////////////////////////////////////////////////////////////////////////////
+
 template<int n> struct dt;
 
 template<int nrows,int ncols> struct mat {

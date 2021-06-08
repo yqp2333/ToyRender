@@ -2,11 +2,75 @@
 #include "model.h"
 
 const TGAColor white = TGAColor(255, 255, 255, 255);
-const TGAColor red   = TGAColor(255, 0,   0,   255);
+const TGAColor red = TGAColor(255, 0, 0, 255);
+
 const int width = 1000;
 const int height = 1000;
+const int depth = 255;
 Model* model = nullptr;
 TGAImage image(width, height, TGAImage::RGB);
+
+const vec3 light(0, 0, -1);
+const vec3 camera(0,0,3);
+const vec3 center(0,0,0);
+const vec3 up(0,1,0);
+
+//transformation Matrix
+mat<4,4>  ModelView;
+mat<4,4>  ViewPort;
+mat<4,4>  Projection;
+
+//void lookat(const vec3 camera, const vec3 center,const vec3 up){
+//    //set new coordinate system
+//    vec3 z = (camera - center).normalize();
+//	vec3 x = cross(up,z).normalize();
+//	vec3 y = cross(z,x).normalize();
+//
+//	mat<4,4> Minv = {{
+//
+//	    {x.x,x.y,x.z,0},
+//	    {y.x,y.y,y.z,0},
+//	    {z.x,z.y,z.z,0},
+//	    {  0,  0,  0,1}
+//	}
+//	};
+//
+//	mat<4, 4> Minv = { {
+//
+//		{x.x,x.y,x.z,0},
+//		{y.x,y.y,y.z,0},
+//		{z.x,z.y,z.z,0},
+//		{  0,  0,  0,1}
+//	}
+//	};
+//
+//}
+
+void viewport(int x, int y, int w, int h){
+	 ViewPort = {{
+	 {     w/2.,       0 ,       0,      x+w/2.},
+	 {       0,      h/2.,       0,      y+h/2.},
+	 {       0,       0,         1.,        1.}, 
+	 {       0,       0,        0,           1}
+	 }};
+}
+
+void projection(float coeff){
+{
+    Projection = {{
+	{1, 0, 0 , 0},
+	{0, 1, 0 , 0},
+	{0, 0, 1 , 0},
+	{0, 0, coeff , 1},
+	}};
+}
+}
+
+vec3& world2screen(vec3& p) {
+	p.x = int((p.x + 1) * width / 2);
+	p.y = int((p.y + 1) * height / 2);
+	return p;
+}
 
 //Draw Line
 void line(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color){
@@ -104,20 +168,14 @@ void triangle(vec3 *pts, vec3* uvs, float* zbuffer, TGAImage &image, float light
 			{
 				zbuffer[int(p.x + p.y * width)] = p.z;
 				//find color
-				TGAColor color = TGAColor(model->diffuse(uv).r*lightIntensity, model->diffuse(uv).g * lightIntensity, model->diffuse(uv).b * lightIntensity, model->diffuse(uv).a*lightIntensity * lightIntensity);
+				TGAColor color = TGAColor(model->diffuse(uv).r*lightIntensity, model->diffuse(uv).g * lightIntensity, model->diffuse(uv).b * lightIntensity, model->diffuse(uv).a*lightIntensity * lightIntensity);//TGAColor(255*lightIntensity, 255 * lightIntensity, 255 * lightIntensity, 255 * lightIntensity);
 				image.set(p.x, p.y, color);
 			}
 		}
 	}
 }
-vec3& world2screen(vec3& p){
-     p.x = int((p.x + 1)*width/2);
-	 p.y = int((p.y + 1)*height/2);
-	 return p;
-}
 
 float lightIntensity(vec3* world_coords){
-	vec3 light(0, 0, -1);
 	//light = light.normalize();
 	vec3 norm = cross(world_coords[2] - world_coords[0], world_coords[1] - world_coords[0]);
 	norm.normalize();
@@ -167,10 +225,11 @@ void drawModelTriangle() {
 
 		for (int j = 0; j < 3; j++)
 		{   //get triangle vertex
-			vec3 v = model->vert(face[2*j]);
+	        vec3 v = model->vert(face[2 * j]);
+			vec4 gl_Vertex = embed<4>(v);
 			world_coords[j] = v;
-			screen_coords[j] = world2screen(v);
-
+			gl_Vertex = ViewPort * Projection * gl_Vertex;
+			screen_coords[j] = vec3(int(gl_Vertex[0]/ gl_Vertex[3]), int(gl_Vertex[1]/gl_Vertex[3]), int(gl_Vertex[2]/gl_Vertex[3]));
 			//get uv
 			vec2 uv = model->uv(face[2 * j + 1]);
 			uvs[j] = vec3(uv.x,uv.y,0);
@@ -197,12 +256,13 @@ int main(int argc, char** argv) {
 
 	//vec2 pts[3] = {vec2(10,10), vec2(100, 30), vec2(190, 160) };
 	//triangle(pts, image, TGAColor(255, 0, 0, 255));
+	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
+	projection(-1/camera.z);
 	drawModelTriangle();
 
 	image.flip_vertically(); //want to have the origin at the left bottom corner of the image
 	image.write_tga_file("output.tga");
 	delete model;
-
 	return 0;
 }
 
