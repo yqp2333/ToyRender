@@ -1,16 +1,15 @@
 ﻿  main.cpp
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(94,17): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(169,40): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(171,182): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(171,128): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(171,89): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(171,51): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(172,21): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(172,16): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(182,14): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(201,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(202,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(203,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(204,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(260,15): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(96,17): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(170,67): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(182,40): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(185,119): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(185,85): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(185,51): warning C4244: “参数”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(186,21): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(186,16): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(196,14): warning C4244: “return”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(215,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(216,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(217,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(218,11): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
   ToyRenderer.vcxproj -> E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\Debug\ToyRenderer.exe

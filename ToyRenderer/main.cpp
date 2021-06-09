@@ -10,8 +10,8 @@ const int depth = 255;
 Model* model = nullptr;
 TGAImage image(width, height, TGAImage::RGB);
 
-const vec3 light(0, 0, -1);
-const vec3 camera(0,0,3);
+vec3 light = vec3(1, -1, 1).normalize();
+const vec3 camera(1, 1, 3);
 const vec3 center(0,0,0);
 const vec3 up(0,1,0);
 
@@ -20,42 +20,44 @@ mat<4,4>  ModelView;
 mat<4,4>  ViewPort;
 mat<4,4>  Projection;
 
-//void lookat(const vec3 camera, const vec3 center,const vec3 up){
-//    //set new coordinate system
-//    vec3 z = (camera - center).normalize();
-//	vec3 x = cross(up,z).normalize();
-//	vec3 y = cross(z,x).normalize();
-//
-//	mat<4,4> Minv = {{
-//
-//	    {x.x,x.y,x.z,0},
-//	    {y.x,y.y,y.z,0},
-//	    {z.x,z.y,z.z,0},
-//	    {  0,  0,  0,1}
-//	}
-//	};
-//
-//	mat<4, 4> Minv = { {
-//
-//		{x.x,x.y,x.z,0},
-//		{y.x,y.y,y.z,0},
-//		{z.x,z.y,z.z,0},
-//		{  0,  0,  0,1}
-//	}
-//	};
-//
-//}
+void lookat(const vec3 camera, const vec3 center,const vec3 up){
+    //set new coordinate system
+    vec3 z = (camera - center).normalize();
+	vec3 x = cross(up,z).normalize();
+	vec3 y = cross(z,x).normalize();
+
+	mat<4,4> Minv = {{
+
+	    {x.x,x.y,x.z,0},
+	    {y.x,y.y,y.z,0},
+	    {z.x,z.y,z.z,0},
+	    {  0,  0,  0,1}
+	}
+	};
+
+	mat<4, 4> Tr = { {
+
+		{1, 0, 0, -center.x},
+		{0, 1, 0, -center.y},
+		{0, 0, 1, -center.z},
+		{0, 0, 0, 1}
+	}
+	};
+
+	ModelView = Minv*Tr;
+
+}
 
 void viewport(int x, int y, int w, int h){
 	 ViewPort = {{
 	 {     w/2.,       0 ,       0,      x+w/2.},
 	 {       0,      h/2.,       0,      y+h/2.},
-	 {       0,       0,         1.,        1.}, 
+	 {       0,       0,         depth/2.,        depth / 2.},
 	 {       0,       0,        0,           1}
 	 }};
 }
 
-void projection(float coeff){
+void projection(double coeff){
 {
     Projection = {{
 	{1, 0, 0 , 0},
@@ -125,7 +127,8 @@ vec3 barycentric(vec3 *pts, vec3 p){
 	return vec3(1.f-(u.x+u.y) / float(u.z),u.x/ float(u.z), u.y/ float(u.z));
 }
 
-void triangle(vec3 *pts, vec3* uvs, float* zbuffer, TGAImage &image, float lightIntensity){
+
+void triangle(vec3 *pts, vec3* uvs,vec3* normals, float* zbuffer, TGAImage &image, float intensity){
 
     //make boundrayBox to scale down the check area
     vec2 boundrayBoxMin(image.get_width()-1.,image.get_height()-1.);
@@ -148,10 +151,11 @@ void triangle(vec3 *pts, vec3* uvs, float* zbuffer, TGAImage &image, float light
 		    // vertex barycentric
 			vec3 barycentricP = barycentric(pts, p);
 			vec2 uv(0,0);
+			vec3 normal(0,0,0);
+			float intensity = 0;
 
 			//check current pixel if in the triangle
 			if (barycentricP.x < 0 || barycentricP.y < 0 || barycentricP.z < 0) continue;
-
 			p.z = 0;
 			//Using vertex barycentric lerp z_value
 			for (int i = 0; i < 3; i++)
@@ -161,14 +165,24 @@ void triangle(vec3 *pts, vec3* uvs, float* zbuffer, TGAImage &image, float light
 			  //lerp uv
 			  uv.x += uvs[i].x * barycentricP[i];
 			  uv.y += uvs[i].y * barycentricP[i];
-			}
 
+			  //lerp light intensity
+			  intensity  += normals[i].normalize() * light* barycentricP[i];
+			  //intensity = -intensity;
+			  //std::cout<<intensity<<std::endl;
+			  
+			  //normal.x += normals[i].x * barycentricp[i];
+			  //normal.y += normals[i].y * barycentricp[i];
+			  //normal.z += normals[i].z * barycentricp[i];
+			}
+			
 			//check z vaule if before to z_buff
 			if (zbuffer[int(p.x+p.y*width)]<p.z)
 			{
 				zbuffer[int(p.x + p.y * width)] = p.z;
-				//find color
-				TGAColor color = TGAColor(model->diffuse(uv).r*lightIntensity, model->diffuse(uv).g * lightIntensity, model->diffuse(uv).b * lightIntensity, model->diffuse(uv).a*lightIntensity * lightIntensity);//TGAColor(255*lightIntensity, 255 * lightIntensity, 255 * lightIntensity, 255 * lightIntensity);
+				//find 
+				if (intensity < 0) continue;
+				TGAColor color = TGAColor(model->diffuse(uv).r* intensity, model->diffuse(uv).g * intensity, model->diffuse(uv).b * intensity, model->diffuse(uv).a);//TGAColor(255 * intensity, 255 * intensity, 255 * intensity, 255); 
 				image.set(p.x, p.y, color);
 			}
 		}
@@ -221,26 +235,25 @@ void drawModelTriangle() {
 		vec3 screen_coords[3];
 		vec3 world_coords[3];
 		vec3 uvs[3];
-		std::cout << i << std::endl;
+		vec3 normals[3];
 
 		for (int j = 0; j < 3; j++)
 		{   //get triangle vertex
-	        vec3 v = model->vert(face[2 * j]);
+	        vec3 v = model->vert(face[j]);
 			vec4 gl_Vertex = embed<4>(v);
 			world_coords[j] = v;
-			gl_Vertex = ViewPort * Projection * gl_Vertex;
+			gl_Vertex = ViewPort * Projection * ModelView*gl_Vertex;
 			screen_coords[j] = vec3(int(gl_Vertex[0]/ gl_Vertex[3]), int(gl_Vertex[1]/gl_Vertex[3]), int(gl_Vertex[2]/gl_Vertex[3]));
 			//get uv
-			vec2 uv = model->uv(face[2 * j + 1]);
-			uvs[j] = vec3(uv.x,uv.y,0);
-		}
+			vec2 uv = model->uv(i,j);
+			uvs[j] = vec3(uv.x, uv.y, 0);
+			//get noraml
 
+			normals[j] = model->normal(i, j);
+		}
 		float intensity = lightIntensity(world_coords);
+		triangle(screen_coords, uvs, normals, zbuffer, image, intensity);
 
-		if (intensity > 0)
-		{
-			triangle(screen_coords, uvs, zbuffer, image, intensity);
-		}
 
 	}
 	delete zbuffer;
@@ -256,8 +269,10 @@ int main(int argc, char** argv) {
 
 	//vec2 pts[3] = {vec2(10,10), vec2(100, 30), vec2(190, 160) };
 	//triangle(pts, image, TGAColor(255, 0, 0, 255));
+	lookat(camera,center,up);
+	std::cout<<ModelView<<std::endl;
 	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
-	projection(-1/camera.z);
+	projection(-1.f / (camera - center).norm());
 	drawModelTriangle();
 
 	image.flip_vertically(); //want to have the origin at the left bottom corner of the image

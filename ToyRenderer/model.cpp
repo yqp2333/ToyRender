@@ -30,17 +30,24 @@ Model::Model(const char *filename) : verts_(), faces_() ,uvs_(),diffusemap_(){
             }
             uvs_.push_back(uv);
         }
-        else if (!line.compare(0, 2, "f ")) {
-            std::vector<int> f;
-            int itrash, idx,idxt;
-            iss >> trash;
-            while (iss >> idx >> trash >> idxt >> trash >> itrash) {
-                idx--; // in wavefront obj all indices start at 1, not zero
-                idxt--; // in wavefront obj all indices start at 1, not zero
-                f.push_back(idx);
-                f.push_back(idxt);
+        else if (!line.compare(0, 2, "vn"))
+        {
+            iss >> trash >> trash;
+            vec3 normal;
+            for (int i = 0; i < 3; i++)
+            {
+                iss >> normal[i];
             }
-            // face is now (point0, texture0, point1, texture1, point2, texture2)
+            normals_.push_back(normal);
+        }
+        else if (!line.compare(0, 2, "f ")) {
+            std::vector<vec3> f;
+            vec3 tmp;
+            iss >> trash;
+            while (iss >> tmp[0] >> trash >> tmp[1] >> trash >> tmp[2]) {
+                for (int i = 0; i < 3; i++) tmp[i]--; // in wavefront obj all indices start at 1, not zero
+                f.push_back(tmp);
+            }
             faces_.push_back(f);
         }
     }
@@ -62,16 +69,23 @@ int Model::nfaces() {
 }
 
 std::vector<int> Model::face(int idx) {
-    return faces_[idx];
+    std::vector<int> face;
+    for (int i = 0; i < (int)faces_[idx].size(); i++) face.push_back(faces_[idx][i][0]);
+    return face;
 }
 
 vec3 Model::vert(int i) {
     return verts_[i];
 }
 
-vec2 Model::uv(int i)
-{
-    return uvs_[i];
+vec2 Model::uv(int iface, int nvert) {
+    int idx = faces_[iface][nvert][1];
+    return vec2(uvs_[idx].x * diffusemap_.get_width(), uvs_[idx].y * diffusemap_.get_height());
+}
+
+vec3 Model::normal(int iface, int nvert) {
+    int idx = faces_[iface][nvert][2];
+    return normals_[idx].normalize();
 }
 
 void Model::load_texture(std::string filename, const char* suffix, TGAImage& img) {
@@ -86,6 +100,6 @@ void Model::load_texture(std::string filename, const char* suffix, TGAImage& img
 }
 
 TGAColor Model::diffuse(vec2 uv){
-    vec2 uvwh(uv[0]*diffusemap_.get_width(),uv[1]*diffusemap_.get_height());
-    return diffusemap_.get(uvwh[0],uvwh[1]);
+    return diffusemap_.get(uv[0],uv[1]);
 }
+
