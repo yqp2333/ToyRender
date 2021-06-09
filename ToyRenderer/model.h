@@ -20,12 +20,11 @@ public:
 	~Model();
 	int nverts();
 	int nfaces();
-	vec3 vert(int i);
+	vec3 vert(int iface, int nvert);
 	vec2 uv(int iface, int nvert);
 	vec3 normal(int iface, int nvert);
 	std::vector<int> face(int idx);
 	TGAColor diffuse(vec2 uv);
-
 };
 
 #endif //__MODEL_H__

@@ -74,8 +74,8 @@ std::vector<int> Model::face(int idx) {
     return face;
 }
 
-vec3 Model::vert(int i) {
-    return verts_[i];
+vec3 Model::vert(int iface, int nvert) {
+    return verts_[faces_[iface][nvert][0]];
 }
 
 vec2 Model::uv(int iface, int nvert) {
