@@ -1,11 +1,8 @@
-﻿  my_gl.cpp
+﻿  main.cpp
 E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(93,37): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(100,91): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(100,87): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(105,24): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(105,20): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(106,22): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(106,18): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl.cpp(132,17): warning C4244: “初始化”: 从“int”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(37,22): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(39,1): warning C4305: “=”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(40,1): warning C4305: “=”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(41,1): warning C4305: “=”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(42,1): warning C4305: “=”: 从“double”到“float”截断
   ToyRenderer.vcxproj -> E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\Debug\ToyRenderer.exe

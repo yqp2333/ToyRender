@@ -65,7 +65,7 @@ vec3 barycentric(vec3* pts, vec3 p) {
 }
 
 
-void triangle(vec3* pts,vec2* uvs, IShader& shader, TGAImage& image, TGAImage& zbuffer)
+void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer)
 {
 	vec3 p;
 	TGAColor color;
@@ -91,14 +91,13 @@ void triangle(vec3* pts,vec2* uvs, IShader& shader, TGAImage& image, TGAImage& z
 			{
 				//Using vertex barycentric lerp z_value
 				z += pts[i][2] * barycentricP[i];
-				uv.x += uvs[i].x * barycentricP[i];
-				uv.y += uvs[i].y * barycentricP[i];
+
 			}
 
 			int frag_depth = std::max(0, std::min(255, int(z)));
 
 			if (barycentricP.x < 0 || barycentricP.y < 0 || barycentricP.z < 0 || zbuffer.get(p.x,p.y)[0]>frag_depth) continue;
-			bool discard =  shader.fragment(barycentricP, uv,color);
+			bool discard =  shader.fragment(barycentricP,color);
 
 			if (!discard)
 			{
