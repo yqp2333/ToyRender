@@ -36,7 +36,30 @@ struct GouraudShader : public IShader
 	virtual bool fragment(vec3 bar, TGAColor& color){
 	    float intensity = vert_intensity * bar;
 		vec2 uv = vert_uv * bar;
-		color = model->diffuse(uv)* intensity;
+		color = TGAColor(255, 255, 255) * intensity;  //model->diffuse(uv)* intensity;
+		return false;
+	}
+};
+
+struct PhongShading : public IShader
+{
+	mat<3, 3> vert_normal;
+	mat<2, 3> vert_uv;
+	//vertex shader
+	virtual vec3 vertex(int iface, int nthvert, vec2& uv) {
+		vert_normal.set_col(nthvert,model->normal(iface, nthvert));
+		vec4 gl_Vertex = embed<4>(model->vert(iface, nthvert));
+		vert_uv.set_col(nthvert, model->uv(iface, nthvert));
+		gl_Vertex = ViewPort * Projection * ModelView * gl_Vertex;
+		return vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3]));
+	}
+
+	//fragment shader(pixel shader)
+	virtual bool fragment(vec3 bar, TGAColor& color) {
+		vec3 normal = vert_normal * bar;
+		float intensity = std::max(0.,normal*light);
+		vec2 uv = vert_uv * bar;
+		color = TGAColor(255, 255, 255) * intensity; //model->diffuse(uv)* intensity;
 		return false;
 	}
 };
@@ -52,7 +75,7 @@ int main(int argc, char** argv) {
 	TGAImage image(width, height, TGAImage::RGB);
 	TGAImage zbuffer(width, height, TGAImage::GRAYSCALE);
 
-	GouraudShader shader;
+	PhongShading shader;
 
 	for (int i = 0; i < model->nfaces(); i++)
 	{
