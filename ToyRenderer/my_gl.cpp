@@ -65,7 +65,7 @@ vec3 barycentric(vec3* pts, vec3 p) {
 }
 
 
-void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer)
+void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer, HDC hdc)
 {
 	vec3 p;
 	TGAColor color;
@@ -75,10 +75,10 @@ void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer)
 	vec2 boundrayBoxMax(0., 0.);
 	vec2 clamp(image.get_width() - 1, image.get_height() - 1);
 	for (int i = 0; i < 3; i++) {
-		boundrayBoxMin.x = std::max(0., std::min(boundrayBoxMin.x, pts[i][0]));
-		boundrayBoxMin.y = std::max(0., std::min(boundrayBoxMin.y, pts[i][1]));
-		boundrayBoxMax.x = std::min(clamp.x, std::max(boundrayBoxMax.x, pts[i][0]));
-		boundrayBoxMax.y = std::min(clamp.y, std::max(boundrayBoxMax.y, pts[i][1]));
+		boundrayBoxMin.x = (std::max)(0., (std::min)(boundrayBoxMin.x, pts[i][0]));
+		boundrayBoxMin.y = (std::max)(0., (std::min)(boundrayBoxMin.y, pts[i][1]));
+		boundrayBoxMax.x = (std::min)(clamp.x, (std::max)(boundrayBoxMax.x, pts[i][0]));
+		boundrayBoxMax.y = (std::min)(clamp.y, (std::max)(boundrayBoxMax.y, pts[i][1]));
 	}
 	// go through the pixel of boundrayBox
 	for (p.x = boundrayBoxMin.x; p.x <= boundrayBoxMax.x; p.x++){
@@ -94,7 +94,7 @@ void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer)
 
 			}
 
-			int frag_depth = std::max(0, std::min(255, int(z)));
+			int frag_depth = (std::max)(0, (std::min)(255, int(z)));
 
 			if (barycentricP.x < 0 || barycentricP.y < 0 || barycentricP.z < 0 || zbuffer.get(p.x,p.y)[0]>frag_depth) continue;
 			bool discard =  shader.fragment(barycentricP,color);
@@ -102,7 +102,9 @@ void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer)
 			if (!discard)
 			{
 			   zbuffer.set(p.x,p.y,TGAColor(frag_depth));
-			   image.set(p.x,p.y,color);
+			   //image.set(p.x,p.y,color);
+			   COLORREF caintColor = RGB(color.bgra[2],color.bgra[1],color.bgra[0]);
+			   SetPixel(hdc, p.x, 1000-p.y, caintColor);
 			}
 
 		}
