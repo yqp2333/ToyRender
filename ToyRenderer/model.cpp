@@ -53,6 +53,7 @@ Model::Model(const char *filename) : verts_(), faces_() ,uvs_(),diffusemap_(){
     }
 
     load_texture(filename, "_diffuse.tga", diffusemap_);
+    load_texture(filename,"_nm.tga",normalmap_);
     in.close();
     std::cerr << "# v# " << verts_.size() << " f# "  << faces_.size() << std::endl;
 }
@@ -101,5 +102,14 @@ void Model::load_texture(std::string filename, const char* suffix, TGAImage& img
 
 TGAColor Model::diffuse(vec2 uv){
     return diffusemap_.get(uv[0],uv[1]);
+}
+
+vec3 Model::normal(vec2 uv) {
+    TGAColor color =  normalmap_.get(uv[0], uv[1]);
+    vec3 normal;
+    normal[0] = color[2] / 255. * 2 - 1;
+    normal[1] = color[1] / 255. * 2 - 1;
+    normal[2] = color[0] / 255. * 2 - 1;
+    return normal;
 }
 
