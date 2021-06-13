@@ -55,6 +55,7 @@ Model::Model(const char *filename) : verts_(), faces_() ,uvs_(),diffusemap_(){
     load_texture(filename, "_diffuse.tga", diffusemap_);
     load_texture(filename,"_nm.tga",normalmap_);
     load_texture(filename, "_spec.tga", specularmap_);
+    load_texture(filename, "_nm_tangent.tga", tangentNormalmap_);
     in.close();
     std::cerr << "# v# " << verts_.size() << " f# "  << faces_.size() << std::endl;
 }
@@ -109,6 +110,13 @@ TGAColor Model::diffuse(vec2 uv){
 double Model::specular(vec2 uv)
 {
     return specularmap_.get(uv[0], uv[1])[0];
+}
+
+vec3 Model::tangent_normal(vec2 uv){
+    //纹理取值（0，1） 法线（ - 1，1） 需要变换一下 normal = color * 2 - 1
+    TGAColor color = tangentNormalmap_.get(uv[0], uv[1]);
+    vec3 tangent_normal(color[2]/255.*2.f-1.,color[1]/255.*2.-1.,color[0]/255.*2.-1.);
+    return tangent_normal;
 }
 
 

@@ -21,6 +21,78 @@ const vec3 camera(1, 1, 3);
 const vec3 center(0, 0, 0);
 const vec3 up(0, 1, 0);
 
+
+struct TangentNormalShader : public IShader
+{
+	mat<3, 3> vert;
+	mat<2, 3> vert_uv;
+	mat<3, 3> vert_normal;
+	mat<4, 4> uniform_M;
+	mat<4, 4> uniform_MIT;
+
+	//vertex shader
+	virtual vec3 vertex(int iface, int nthvert, vec2& uv) {
+		vec4 gl_Vertex = embed<4>(model->vert(iface, nthvert));//get vertex 
+		vert_normal.set_col(nthvert, proj<3>(uniform_MIT * embed<4>(model->normal(iface, nthvert).normalize(),.0f)));//get model`s normal
+		vert_uv.set_col(nthvert, model->uv(iface, nthvert));//get uv
+		gl_Vertex = ViewPort * Projection * ModelView * gl_Vertex;//mvp
+		vert.set_col(nthvert,vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3])));//set the vertex after mvp tansformation 
+		return vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3]));
+	}
+
+	//fragment shader(pixel shader)
+	virtual bool fragment(vec3 bar, TGAColor& color) {
+		vec2 uv = vert_uv * bar;
+		vec3 normal = (vert_normal * bar).normalize();
+
+	//---------------------tangent space normal mapping--------------------------------------------
+		///calculation TBN Mri
+		vec3 edge1 = vert.col(1) - vert.col(0);
+		vec3 edge2 = vert.col(2) - vert.col(0);
+
+		vec2 delta_uv1 = vert_uv.col(1) - vert_uv.col(0);
+		vec2 delta_uv2 = vert_uv.col(2) - vert_uv.col(0);
+
+		float a = 1/(delta_uv1.x*delta_uv2.y - delta_uv2.x * delta_uv1.y);
+
+		mat<2,2> tri_a = { {
+
+		{delta_uv2.y, -delta_uv2.x},
+		{-delta_uv1.y, delta_uv1.x},
+		}};
+
+		mat<3,2> e1e2;
+		e1e2.set_col(0,edge1);
+		e1e2.set_col(1,edge2);
+
+		mat<3,2> TB = (e1e2 * tri_a) * a;
+
+		mat<3,3> TBN;
+
+		TBN.set_col(0,TB.transpose()[0].normalize());
+		TBN.set_col(1, TB.transpose()[1].normalize());
+		TBN.set_col(2,normal);
+
+		//calculation tangent_normal;
+		vec3 normal_new = (TBN * model->tangent_normal(uv)).normalize();
+
+	//------------------------------------------------------------------------------
+
+		vec3 light_new = proj<3>(uniform_M * embed<4>(light)).normalize();
+		vec3 half_way_vector = (normal_new + light_new).normalize();
+		float diffusely_reflection = (std::max)(0., light_new * normal_new);
+		float ambient_lighting = 0.5;
+		float specular_highlights = pow((std::max)(0., half_way_vector * light_new), model->specular(uv));
+		TGAColor c = model->diffuse(uv);
+		color = c;
+		for (int i = 0; i < 3; i++)
+		{
+			color[i] = std::min<float>(5 + c[i] * (diffusely_reflection + 0.4 * specular_highlights), 255);
+		}
+		return false;
+	}
+};
+
 struct BullinPhongShader : public IShader
 {
 	mat<2, 3> vert_uv;
@@ -30,7 +102,7 @@ struct BullinPhongShader : public IShader
 	virtual vec3 vertex(int iface, int nthvert, vec2& uv) {
 		vec4 gl_Vertex = embed<4>(model->vert(iface, nthvert));
 		vert_uv.set_col(nthvert, model->uv(iface, nthvert));
-		gl_Vertex = ViewPort * Projection * ModelView * gl_Vertex;
+		gl_Vertex = ViewPort * Projection * ModelView *  gl_Vertex;
 		return vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3]));
 	}
 
@@ -136,7 +208,7 @@ void initRenderInfo(){
 void render(HDC chdc){
 
 	//‰÷»æ
-	BullinPhongShader shader;
+	TangentNormalShader shader;
 	shader.uniform_M = Projection * ModelView;
 	shader.uniform_MIT = (Projection * ModelView).invert_transpose();
 	for (int i = 0; i < model->nfaces(); i++)
