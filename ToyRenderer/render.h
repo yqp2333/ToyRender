@@ -6,21 +6,121 @@
 const TGAColor white = TGAColor(255, 255, 255, 255);
 const TGAColor red = TGAColor(255, 0, 0, 255);
 
+
 extern mat<4, 4>  ModelView;
 extern mat<4, 4>  ViewPort;
 extern mat<4, 4>  Projection;
 
 Model* model = nullptr;
 TGAImage image;
-TGAImage zbuffer;
-const int width = 1000;
-const int height = 1000;
+TGAImage depth_image;
+float* zbuffer;
+float* shadowbuffer;
+
+extern const int width = 1000;
+extern const int height = 1000;
+extern const int depth = 2000.f;
 
 vec3 light = vec3(1, 1, 1).normalize();
 const vec3 camera(1, 1, 3);
 const vec3 center(0, 0, 0);
 const vec3 up(0, 1, 0);
 
+
+struct DepthShader : public IShader {
+    
+	DepthShader():vert(){};
+	mat<3, 3> vert;
+
+	virtual vec3 vertex(int iface, int nthvert, vec2& uv) {
+		vec4 gl_Vertex = embed<4>(model->vert(iface, nthvert));//get vertex 
+		gl_Vertex = ViewPort * Projection * ModelView * gl_Vertex;//mvp
+		vert.set_col(nthvert, vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3])));
+		return vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3]));
+	}
+
+	virtual bool fragment(vec3 bar, TGAColor& color) {
+	    vec3 pos = vert * bar;
+		color = TGAColor(255,255,255)*(pos.z/depth);
+		return false;
+	}
+
+};
+
+struct ShadowShader : public IShader
+{
+	mat<3, 3> vert;
+	mat<2, 3> vert_uv;
+	mat<3, 3> vert_normal;
+	mat<4, 4> uniform_M;
+	mat<4, 4> uniform_MIT;
+	mat<4, 4> uniform_MShadow;//light`s tansformation
+
+	//vertex shader
+	virtual vec3 vertex(int iface, int nthvert, vec2& uv) {
+		vec4 gl_Vertex = embed<4>(model->vert(iface, nthvert));//get vertex 
+		vert_normal.set_col(nthvert, proj<3>(uniform_MIT * embed<4>(model->normal(iface, nthvert).normalize(), .0f)));//get model`s normal
+		vert_uv.set_col(nthvert, model->uv(iface, nthvert));//get uv
+		gl_Vertex = ViewPort * Projection * ModelView * gl_Vertex;//mvp
+		vert.set_col(nthvert, vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3])));//set the vertex after mvp tansformation 
+		return vec3(int(gl_Vertex[0] / gl_Vertex[3]), int(gl_Vertex[1] / gl_Vertex[3]), int(gl_Vertex[2] / gl_Vertex[3]));
+	}
+
+	//fragment shader(pixel shader)
+	virtual bool fragment(vec3 bar, TGAColor& color) {
+		vec2 uv = vert_uv * bar;
+		vec3 normal = (vert_normal * bar).normalize();
+
+		//---------------------tangent space normal mapping--------------------------------------------
+			///calculation TBN Mri
+		vec3 edge1 = vert.col(1) - vert.col(0);
+		vec3 edge2 = vert.col(2) - vert.col(0);
+
+		vec2 delta_uv1 = vert_uv.col(1) - vert_uv.col(0);
+		vec2 delta_uv2 = vert_uv.col(2) - vert_uv.col(0);
+
+		float a = 1 / (delta_uv1.x * delta_uv2.y - delta_uv2.x * delta_uv1.y);
+		mat<2, 2> tri_a = { {
+
+		{delta_uv2.y, -delta_uv2.x},
+		{-delta_uv1.y, delta_uv1.x},
+		} };
+
+		mat<3, 2> e1e2;
+		e1e2.set_col(0, edge1);
+		e1e2.set_col(1, edge2);
+
+		mat<3, 2> TB = (e1e2 * tri_a) * a;
+
+		mat<3, 3> TBN;
+
+		TBN.set_col(0, TB.transpose()[0].normalize());
+		TBN.set_col(1, TB.transpose()[1].normalize());
+		TBN.set_col(2, normal);
+
+		//calculation tangent_normal;
+		vec3 normal_new = (TBN * model->tangent_normal(uv)).normalize();
+
+		//----------------------------------Shadow Maps----------------------------------
+		vec4 shadow_p = (uniform_MShadow * embed<4>(vert * bar));
+		shadow_p = shadow_p/shadow_p[3];
+		float shadow = 0.3f + 0.7f*(shadowbuffer[int(shadow_p[0]) + int(shadow_p[1]) * width] < shadow_p[2] + 40); // 40 is tolerance
+
+		//------------------------------------------------------------------------------
+		vec3 light_new = proj<3>(uniform_M * embed<4>(light)).normalize();
+		vec3 half_way_vector = (normal_new + light_new).normalize();
+		float diffusely_reflection = (std::max)(0., light_new * normal_new);
+		float ambient_lighting = 0.5;
+		float specular_highlights = pow((std::max)(0., half_way_vector * light_new), model->specular(uv));
+		TGAColor c = model->diffuse(uv);
+		color = c;
+		for (int i = 0; i < 3; i++)
+		{
+			color[i] = std::min<float>(5 + c[i] * shadow * (diffusely_reflection + 0.4 * specular_highlights), 255);
+		}
+		return false;
+	}
+};
 
 struct TangentNormalShader : public IShader
 {
@@ -171,7 +271,6 @@ struct GouraudShader : public IShader
 	}
 };
 
-
 struct PhongShading : public IShader
 {
 	mat<3, 3> vert_normal;
@@ -197,20 +296,42 @@ struct PhongShading : public IShader
 
 void initRenderInfo(){
 	model = new Model("obj/african_head.obj");
-	lookat(camera, center, up);
-	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
-	projection(-1.f / (camera - center).norm());
-
 	image = TGAImage(width, height, TGAImage::RGB);
-	zbuffer = TGAImage(width, height, TGAImage::GRAYSCALE);
+	depth_image = TGAImage(width, height, TGAImage::RGB);
+	zbuffer = new float[width * height];
+	shadowbuffer = new float[width * height];
+	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
 }
 
 void render(HDC chdc){
 
-	//‰÷»æ
-	TangentNormalShader shader;
+    //depth render
+	lookat(light, center, up);
+	projection(0);
+
+	
+
+	DepthShader depthshader;
+
+	for (int i = 0; i < model->nfaces(); i++)
+	{
+		vec3 screen_coords[3];
+		vec2 uvs[3];
+		for (int j = 0; j < 3; j++)
+		{
+			screen_coords[j] = depthshader.vertex(i, j, uvs[j]);
+		}
+		triangle(screen_coords, depthshader, depth_image, shadowbuffer, chdc,0);
+	}
+
+	//render 
+	ShadowShader shader;
+	mat<4,4> M = ViewPort * Projection * ModelView;
+	lookat(camera, center, up);
+	projection(-1.f / (camera - center).norm());
 	shader.uniform_M = Projection * ModelView;
 	shader.uniform_MIT = (Projection * ModelView).invert_transpose();
+	shader.uniform_MShadow = M * (ViewPort * Projection * ModelView).invert();
 	for (int i = 0; i < model->nfaces(); i++)
 	{
 		vec3 screen_coords[3];
@@ -226,7 +347,7 @@ void render(HDC chdc){
 
 void saveTGAImage(){
 	image.flip_vertically();
-	zbuffer.flip_vertically();
+	depth_image.flip_vertically();
 	image.write_tga_file("output.tga");
-	zbuffer.write_tga_file("zbuffer.tga");
+	depth_image.write_tga_file("depth.tga");
 }

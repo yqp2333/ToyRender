@@ -3,6 +3,7 @@
 mat<4, 4>  ModelView;
 mat<4, 4>  ViewPort;
 mat<4, 4>  Projection;
+float depth = 2000.f;
 
 void lookat(const vec3 camera, const vec3 center, const vec3 up) {
 	//set new coordinate system
@@ -36,7 +37,7 @@ void viewport(int x, int y, int w, int h) {
 	ViewPort = { {
 	{     w / 2.,       0 ,       0,      x + w / 2.},
 	{       0,      h / 2.,       0,      y + h / 2.},
-	{       0,       0,         255 / 2.,        255 / 2.},
+	{       0,       0,         depth / 2.,        depth / 2.},
 	{       0,       0,        0,           1}
 	} };
 }
@@ -65,7 +66,7 @@ vec3 barycentric(vec3* pts, vec3 p) {
 }
 
 
-void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer, HDC hdc)
+void triangle(vec3* pts, IShader& shader, TGAImage& image, float* zbuffer, HDC hdc , bool isPaint)
 {
 	vec3 p;
 	TGAColor color;
@@ -91,20 +92,22 @@ void triangle(vec3* pts, IShader& shader, TGAImage& image, TGAImage& zbuffer, HD
 			{
 				//Using vertex barycentric lerp z_value
 				z += pts[i][2] * barycentricP[i];
-
 			}
 
-			int frag_depth = (std::max)(0, (std::min)(255, int(z)));
+			int frag_depth = z;
 
-			if (barycentricP.x < 0 || barycentricP.y < 0 || barycentricP.z < 0 || zbuffer.get(p.x,p.y)[0]>frag_depth) continue;
+			if (barycentricP.x < 0 || barycentricP.y < 0 || barycentricP.z < 0 || zbuffer[int(p.x) + int(p.y)*image.get_width()] > frag_depth) continue;
 			bool discard =  shader.fragment(barycentricP,color);
 
 			if (!discard)
 			{
-			   zbuffer.set(p.x,p.y,TGAColor(frag_depth));
+			   zbuffer[int(p.x + p.y * image.get_width())] = frag_depth;
 			   //image.set(p.x,p.y,color);
 			   COLORREF caintColor = RGB(color.bgra[2],color.bgra[1],color.bgra[0]);
-			   SetPixel(hdc, p.x, 1000-p.y, caintColor);
+			   if (isPaint)
+			   {
+				   SetPixel(hdc, p.x, 1000 - p.y, caintColor);
+			   }
 			}
 
 		}

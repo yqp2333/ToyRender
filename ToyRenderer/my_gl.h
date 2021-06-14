@@ -12,9 +12,10 @@ void projection(double coeff);
 struct IShader
 {
 	virtual ~IShader();
+	bool isDepthShader;
 	virtual vec3 vertex(int iface, int nthvert, vec2& uv) = 0;
 	virtual bool fragment(vec3 bar, TGAColor &color) = 0;
 };
 
-void triangle(vec3* pts,IShader &shader, TGAImage& image, TGAImage& zbuffer,HDC hdc);
+void triangle(vec3* pts,IShader &shader, TGAImage& image, float* zbuffer,HDC hdc, bool isPaint =1);
 void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color);
