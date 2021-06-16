@@ -296,7 +296,7 @@ struct PhongShading : public IShader
 	}
 };
 
-void clear_zbuffer(int width, int height, float* zbuffer)
+void clear_buffer(int width, int height, float* zbuffer)
 {
 	for (int i = 0; i < width * height; i++)
 		zbuffer[i] = -55555555;
@@ -329,8 +329,8 @@ void initRenderInfo(){
 
 unsigned char* render(HDC chdc){
 
-	clear_zbuffer(width, height, shadowbuffer);
-	clear_zbuffer(width, height, zbuffer);
+	clear_buffer(width, height, shadowbuffer);
+	clear_buffer(width, height, zbuffer);
 	clear_framebuffer(width, height, frameBuffer);
 
     //depth render
@@ -347,7 +347,7 @@ unsigned char* render(HDC chdc){
 		{
 			screen_coords[j] = depthshader.vertex(i, j, uvs[j]);
 		}
-		triangle(screen_coords, depthshader, depth_image, shadowbuffer, frameBuffer, chdc,0);
+		triangle(screen_coords, depthshader, height, width,shadowbuffer, frameBuffer, chdc,0);
 	}
 
 	//render 
@@ -366,15 +366,15 @@ unsigned char* render(HDC chdc){
 		{
 			screen_coords[j] = shader.vertex(i, j, uvs[j]);
 		}
-		triangle(screen_coords, shader, image, zbuffer, frameBuffer, chdc);
+		triangle(screen_coords, shader, height, width, zbuffer, frameBuffer, chdc);
 	}
 
 	return frameBuffer;
 }
 
-void saveTGAImage(){
-	image.flip_vertically();
-	depth_image.flip_vertically();
-	image.write_tga_file("output.tga");
-	depth_image.write_tga_file("depth.tga");
-}
+//void saveTGAImage(){
+//	image.flip_vertically();
+//	depth_image.flip_vertically();
+//	image.write_tga_file("output.tga");
+//	depth_image.write_tga_file("depth.tga");
+//}

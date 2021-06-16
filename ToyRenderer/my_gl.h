@@ -17,5 +17,5 @@ struct IShader
 	virtual bool fragment(vec3 bar, TGAColor &color) = 0;
 };
 
-void triangle(vec3* pts, IShader& shader, TGAImage& image, float* zbuffer, unsigned char* framebuffer, HDC hdc, bool isPaint = 1);
+void triangle(vec3* pts, IShader& shader, float height, float width, float* zbuffer, unsigned char* framebuffer, HDC hdc, bool isPaint = 1);
 void line(int x0, int y0, int x1, int y1, TGAImage& image, TGAColor color);

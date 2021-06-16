@@ -74,15 +74,15 @@ static void set_color(unsigned char* framebuffer, int x, int y, unsigned char co
 		framebuffer[index + i] = color[i];
 }
 
-void triangle(vec3* pts, IShader& shader, TGAImage& image, float* zbuffer ,unsigned char* framebuffer,HDC hdc, bool isPaint)
+void triangle(vec3* pts, IShader& shader, float height, float width, float* zbuffer ,unsigned char* framebuffer,HDC hdc, bool isPaint)
 {
 	vec3 p;
 	TGAColor color;
 
 	//make boundrayBox to scale down the check area
-	vec2 boundrayBoxMin(image.get_width() - 1., image.get_height() - 1.);
+	vec2 boundrayBoxMin(width - 1.,height - 1.);
 	vec2 boundrayBoxMax(0., 0.);
-	vec2 clamp(image.get_width() - 1, image.get_height() - 1);
+	vec2 clamp(width - 1., height - 1.);
 	for (int i = 0; i < 3; i++) {
 		boundrayBoxMin.x = (std::max)(0., (std::min)(boundrayBoxMin.x, pts[i][0]));
 		boundrayBoxMin.y = (std::max)(0., (std::min)(boundrayBoxMin.y, pts[i][1]));
@@ -104,12 +104,12 @@ void triangle(vec3* pts, IShader& shader, TGAImage& image, float* zbuffer ,unsig
 
 			int frag_depth = z;
 
-			if (barycentricP.x < 0 || barycentricP.y < 0 || barycentricP.z < 0 || zbuffer[int(p.x) + int(p.y)*image.get_width()] > frag_depth) continue;
+			if (barycentricP.x < 0 || barycentricP.y < 0 || barycentricP.z < 0 || zbuffer[ int(p.x) + int(p.y * width)] > frag_depth) continue;
 			bool discard =  shader.fragment(barycentricP,color);
 
 			if (!discard)
 			{
-			   zbuffer[int(p.x + p.y * image.get_width())] = frag_depth;
+			   zbuffer[int(p.x + p.y * width)] = frag_depth;
 			   unsigned char c[3];
 			   c[0] = color.bgra[2];
 			   c[1] = color.bgra[1];
