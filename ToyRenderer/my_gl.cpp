@@ -3,7 +3,7 @@
 mat<4, 4>  ModelView;
 mat<4, 4>  ViewPort;
 mat<4, 4>  Projection;
-float depth = 2000.f;
+const float depth = 2000.f;
 
 void lookat(const vec3 camera, const vec3 center, const vec3 up) {
 	//set new coordinate system
@@ -65,8 +65,16 @@ vec3 barycentric(vec3* pts, vec3 p) {
 	return vec3(1.f - (u.x + u.y) / float(u.z), u.x / float(u.z), u.y / float(u.z));
 }
 
+static void set_color(unsigned char* framebuffer, int x, int y, unsigned char color[])
+{
+	int i;
+	int index = ((800 - y - 1) * 800 + x) * 4; // the origin for pixel is bottom-left, but the framebuffer index counts from top-left
 
-void triangle(vec3* pts, IShader& shader, TGAImage& image, float* zbuffer, HDC hdc , bool isPaint)
+	for (i = 0; i < 3; i++)
+		framebuffer[index + i] = color[i];
+}
+
+void triangle(vec3* pts, IShader& shader, TGAImage& image, float* zbuffer ,unsigned char* framebuffer,HDC hdc, bool isPaint)
 {
 	vec3 p;
 	TGAColor color;
@@ -102,11 +110,14 @@ void triangle(vec3* pts, IShader& shader, TGAImage& image, float* zbuffer, HDC h
 			if (!discard)
 			{
 			   zbuffer[int(p.x + p.y * image.get_width())] = frag_depth;
-			   //image.set(p.x,p.y,color);
-			   COLORREF caintColor = RGB(color.bgra[2],color.bgra[1],color.bgra[0]);
+			   unsigned char c[3];
+			   c[0] = color.bgra[2];
+			   c[1] = color.bgra[1];
+			   c[2] = color.bgra[0];
+
 			   if (isPaint)
 			   {
-				   SetPixel(hdc, p.x, 1000 - p.y, caintColor);
+				   set_color(framebuffer, p.x, p.y, c);
 			   }
 			}
 

@@ -8,6 +8,11 @@ HWND ghMainWnd = 0;//Ö÷´°¿Ú¾ä±ú
 HDC hdc;//Éè±¸¾ä±ú
 HDC chdc;//¼æÈİÉè±¸¾ä±ú
 HBITMAP bmp;
+HBITMAP bmp_old;
+LPVOID ptr;
+DWORD t_now;
+DWORD t_pre;
+unsigned char* window_fb;
 
 bool InitWindowsApp(HINSTANCE instanceHandle, int show); //³õÊ¼»¯Ö÷´°¿Ú,³É¹¦Ôò·µ»Øtrue
 
@@ -15,7 +20,9 @@ int Run();//·â×°ÏûÏ¢Ñ­»·´úÂë
 
 LRESULT CALLBACK //Ö÷´°¿ÚµÄ´°¿Ú¹ı³Ì£¬´°¿Ú¹ı³Ì»á´¦Àí´°¿ÚËù½ÓÊÕµ½µÄÏûÏ¢¡£»Øµ÷º¯Êı£¬´«½øÈ¥ÓÃÓÚ»Øµ÷
 WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
+static void init_bm_header(BITMAPINFOHEADER& bi, int width, int height);
+void window_draw(unsigned char* framebuffer);
+static void window_display();
 
 //WinMain == Main
 int WINAPI
@@ -77,12 +84,23 @@ bool InitWindowsApp(HINSTANCE instanceHandle, int show)
 	}
 
 
-	//³õÊ¼»¯ÏÔÊ¾ÉèÖÃ
+    //init bmp header
+	BITMAPINFOHEADER bi;
+	init_bm_header(bi, width, height);
+
+	//registe DC
 	hdc = GetDC(ghMainWnd);
 	chdc = CreateCompatibleDC(hdc);
-	bmp = CreateCompatibleBitmap(hdc, width, height);
 
-	SelectObject(chdc, bmp);
+	ReleaseDC(ghMainWnd,hdc);
+
+	//creat bmp and bind
+	bmp = CreateDIBSection(chdc, (BITMAPINFO*)&bi, DIB_RGB_COLORS, &ptr, 0, 0);
+	bmp_old = (HBITMAP)SelectObject(chdc, bmp);
+
+	//the show data
+	window_fb = (unsigned char*)ptr;
+
 
 	initRenderInfo();
 
@@ -91,7 +109,6 @@ bool InitWindowsApp(HINSTANCE instanceHandle, int show)
 	UpdateWindow(ghMainWnd);
 
 	return true;
-
 }
 
 int Run()
@@ -105,9 +122,12 @@ int Run()
 		}
 		else //Ö´ĞĞ¶¯»­»òÓÎÏ·Âß¼­²¿·Ö´úÂë
 		{
-		    render(chdc);
-			BitBlt(hdc, 0, 0, width, height, chdc, 0, 0, SRCCOPY);
-			//ReleaseDC(ghMainWnd,hdc);
+			DWORD t_now = GetTickCount();
+			if (t_now - t_pre >= 20)//0.05s
+			{
+				window_draw(render(chdc));
+				camera.x += 0.1;
+			}
 
 		}
 
@@ -141,7 +161,12 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {// HWND½ÓÊÕ´ËÏûÏ¢µÄ´
 		if (wParam == VK_ESCAPE)// wParamÎª°´ÏÂ°´¼üµÄĞéÄâ¼ü´úÂë£¬ÓÃÓÚÅĞ¶ÏÊÇ·ñÊÇESC
 			DestroyWindow(ghMainWnd);
 		    delete model;
-			DeleteDC(hdc);
+			delete zbuffer;
+			delete frameBuffer;
+			delete shadowbuffer;
+			delete window_fb;
+			DeleteObject(bmp);
+			DeleteObject(bmp_old);
 			DeleteDC(chdc);
 		return 0;
 
@@ -152,4 +177,40 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {// HWND½ÓÊÕ´ËÏûÏ¢µÄ´
 
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);//Ä¬ÈÏ´°¿Ú¹ı³Ì£¬ÆäËûÎª´¦ÀíµÄÏûÏ¢¶¼½»¸øËüÓÃÄ¬ÈÏ·½·¨´¦Àí
+}
+
+
+static void window_display()//show bmp
+{
+	hdc = GetDC(ghMainWnd);
+	BitBlt(hdc, 0, 0, width, height, chdc, 0, 0, SRCCOPY);
+	ReleaseDC(ghMainWnd, hdc);
+	DWORD t_pre = GetTickCount();
+}
+
+void window_draw(unsigned char* framebuffer) //framebuffer to window_fb
+{
+	int i, j;
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			int index = (i * width + j) * 4;
+			window_fb[index] = framebuffer[index + 2];
+			window_fb[index + 1] = framebuffer[index + 1];
+			window_fb[index + 2] = framebuffer[index];
+		}
+	}
+	window_display();
+
+}static void init_bm_header(BITMAPINFOHEADER& bi, int width, int height)// init bmp header
+{
+	memset(&bi, 0, sizeof(BITMAPINFOHEADER));
+	bi.biSize = sizeof(BITMAPINFOHEADER);
+	bi.biWidth = width;
+	bi.biHeight = -height;
+	bi.biPlanes = 1;
+	bi.biBitCount = 32;
+	bi.biCompression = BI_RGB;
+	bi.biSizeImage = width * height * 4;
 }

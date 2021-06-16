@@ -16,13 +16,15 @@ TGAImage image;
 TGAImage depth_image;
 float* zbuffer;
 float* shadowbuffer;
+unsigned char* frameBuffer;
 
-extern const int width = 1000;
-extern const int height = 1000;
+
+extern const int width = 800;
+extern const int height = 800;
 extern const int depth = 2000.f;
 
 vec3 light = vec3(1, 1, 1).normalize();
-const vec3 camera(1, 1, 3);
+vec3 camera(1, 1, 3);
 const vec3 center(0, 0, 0);
 const vec3 up(0, 1, 0);
 
@@ -294,22 +296,46 @@ struct PhongShading : public IShader
 	}
 };
 
+void clear_zbuffer(int width, int height, float* zbuffer)
+{
+	for (int i = 0; i < width * height; i++)
+		zbuffer[i] = -55555555;
+}
+
+void clear_framebuffer(int width, int height, unsigned char* framebuffer)
+{
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			int index = (i * width + j) * 4;
+
+			framebuffer[index + 2] = 0;
+			framebuffer[index + 1] = 0;
+			framebuffer[index] = 0;
+		}
+	}
+}
+
 void initRenderInfo(){
 	model = new Model("obj/african_head.obj");
 	image = TGAImage(width, height, TGAImage::RGB);
 	depth_image = TGAImage(width, height, TGAImage::RGB);
 	zbuffer = new float[width * height];
 	shadowbuffer = new float[width * height];
+	frameBuffer = new unsigned char [width * height *4]();
 	viewport(width / 8, height / 8, width * 3 / 4, height * 3 / 4);
 }
 
-void render(HDC chdc){
+unsigned char* render(HDC chdc){
+
+	clear_zbuffer(width, height, shadowbuffer);
+	clear_zbuffer(width, height, zbuffer);
+	clear_framebuffer(width, height, frameBuffer);
 
     //depth render
 	lookat(light, center, up);
 	projection(0);
-
-	
 
 	DepthShader depthshader;
 
@@ -321,7 +347,7 @@ void render(HDC chdc){
 		{
 			screen_coords[j] = depthshader.vertex(i, j, uvs[j]);
 		}
-		triangle(screen_coords, depthshader, depth_image, shadowbuffer, chdc,0);
+		triangle(screen_coords, depthshader, depth_image, shadowbuffer, frameBuffer, chdc,0);
 	}
 
 	//render 
@@ -340,9 +366,10 @@ void render(HDC chdc){
 		{
 			screen_coords[j] = shader.vertex(i, j, uvs[j]);
 		}
-		triangle(screen_coords, shader, image, zbuffer, chdc);
+		triangle(screen_coords, shader, image, zbuffer, frameBuffer, chdc);
 	}
 
+	return frameBuffer;
 }
 
 void saveTGAImage(){

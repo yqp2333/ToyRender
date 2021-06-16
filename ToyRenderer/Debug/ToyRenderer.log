@@ -1,66 +1,69 @@
 ﻿  main.cpp
 E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(22,26): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(44,39): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(82,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(112,30): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(24,26): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(46,39): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(84,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(114,30): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
           with
           [
               _Ty=double
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(114,29): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(119,33): warning C4244: “参数”: 从“double”转换到“const _Ty”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(116,29): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(121,33): warning C4244: “参数”: 从“double”转换到“const _Ty”，可能丢失数据
           with
           [
               _Ty=float
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(119,30): warning C4244: “=”: 从“const _Ty”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(121,30): warning C4244: “=”: 从“const _Ty”转换到“unsigned char”，可能丢失数据
           with
           [
               _Ty=float
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(156,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(183,30): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(158,11): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(185,30): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
           with
           [
               _Ty=double
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(185,29): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(190,33): warning C4244: “参数”: 从“double”转换到“const _Ty”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(187,29): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(192,33): warning C4244: “参数”: 从“double”转换到“const _Ty”，可能丢失数据
           with
           [
               _Ty=float
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(190,30): warning C4244: “=”: 从“const _Ty”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(192,30): warning C4244: “=”: 从“const _Ty”转换到“unsigned char”，可能丢失数据
           with
           [
               _Ty=float
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(215,30): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(217,30): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
           with
           [
               _Ty=double
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(217,29): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(222,35): warning C4244: “参数”: 从“double”转换到“const _Ty”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(219,29): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(224,35): warning C4244: “参数”: 从“double”转换到“const _Ty”，可能丢失数据
           with
           [
               _Ty=float
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(222,30): warning C4244: “=”: 从“const _Ty”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(224,30): warning C4244: “=”: 从“const _Ty”转换到“unsigned char”，可能丢失数据
           with
           [
               _Ty=float
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(246,19): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(248,19): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
           with
           [
               _Ty=double
           ]
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(267,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(290,19): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(269,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(292,19): warning C4244: “初始化”: 从“const _Ty”转换到“float”，可能丢失数据
           with
           [
               _Ty=double
           ]
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\render.h(302,25): warning C4305: “=”: 从“int”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(193,9): warning C4101: “j”: 未引用的局部变量
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(193,6): warning C4101: “i”: 未引用的局部变量
   ToyRenderer.vcxproj -> E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\Debug\ToyRenderer.exe
