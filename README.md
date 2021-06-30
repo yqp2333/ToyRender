@@ -23,6 +23,8 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 9.Tangent space normal mapping  
 10.Perspective-Correct Interpolation  
 
+![1](https://user-images.githubusercontent.com/74462917/123964665-a3e3ef00-d9ee-11eb-934c-58418ac3bd56.png)
+
 ### 计划实现功能（開発予定）
 1.Shadow Mapping  
 2.SSAO  
@@ -39,3 +41,7 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 2.Dmitry V. Sokolov tinyrenderer  
 3.Fundamentals Of Computer Graphics　　
 4.Learn OpenGL  
+
+
+
+
