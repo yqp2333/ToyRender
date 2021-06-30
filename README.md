@@ -1,6 +1,6 @@
 # ToyRender
 
-## 简介（概要）  
+### 简介（概要）  
 为了更好的理解计算机图形学的相关知识和算法，也为了更有效率的学习图形学API，决定自己动手使用C++实现一个软渲染器。  
 窗口显示基于Win32，使用了Dmitry V. Sokolov提供的数学计算和资源导入脚本。当前运行速度较慢...  
 目前不断更新中...
@@ -10,7 +10,7 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 申し訳ございませんが、現在の運転速度はまだ遅くなっておりますので、ご了承ください。
 現在更新と改善中…
 
-## 已实现功能（実装済み）
+### 已实现功能（実装済み）
 1.UI Window  
 2.MVP Transformation  
 3.Triangle Rasterization（Bounding Box acceleration）  
@@ -22,7 +22,7 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 9.Tangent space normal mapping  
 10.Perspective-Correct Interpolation  
 
-## 计划实现功能（開発予定）
+### 计划实现功能（開発予定）
 1.Shadow Mapping
 2.SSAO
 3.MSAA
@@ -33,7 +33,7 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 8.Clipping in Homogeneous Coordinates  
 9.Movable Camera  
 
-## 参考()
+### 参考
 1.GAMES101: 现代计算机图形学入门  
 2.Dmitry V. Sokolov tinyrenderer  
 3.Fundamentals Of Computer Graphics 
