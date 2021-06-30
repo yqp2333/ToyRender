@@ -38,7 +38,7 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 ### 参考
 1.GAMES101: 现代计算机图形学入门  
 2.Dmitry V. Sokolov tinyrenderer  
-3.Fundamentals Of Computer Graphics　　
+3.Fundamentals Of Computer Graphics  
 4.Learn OpenGL  
 
 
