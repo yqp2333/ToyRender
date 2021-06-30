@@ -15,39 +15,54 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\tinyrenderer-909fe20934ba5334144d2c748805690a1fa4c89f\tinyrenderer-909fe20934ba5334144d2c748805690a1fa4c89f\Makefile" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClCompile Include="model\model.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="model\tgaimage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="math\geometry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="model.cpp">
+    <ClCompile Include="window\window.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="tgaimage.cpp">
+    <ClCompile Include="my_gl\my_gl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="geometry.cpp">
+    <ClCompile Include="shader\shader.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="my_gl.cpp">
+    <ClCompile Include="pipeline\pipeline.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shader\BlinnPhongShader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="model.h">
+    <ClInclude Include="model\model.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="tgaimage.h">
+    <ClInclude Include="model\tgaimage.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="geometry.h">
+    <ClInclude Include="math\geometry.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="my_gl.h">
+    <ClInclude Include="window\window.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="render.h">
+    <ClInclude Include="my_gl\my_gl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shader\shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pipeline\pipeline.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
