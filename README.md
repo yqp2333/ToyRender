@@ -7,8 +7,8 @@
 
 
 ## 已实现功能  
-1.UI Window
-2.MVP Transformation
+1.UI Window  
+2.MVP Transformation  
 3.Triangle Rasterization（Bounding Box acceleration）  
 4.Programmable vertex and fagment shader  
 5.Blinn–Phong reflection model  
