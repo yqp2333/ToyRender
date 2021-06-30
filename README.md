@@ -24,10 +24,10 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 10.Perspective-Correct Interpolation  
 
 ### 计划实现功能（開発予定）
-1.Shadow Mapping
-2.SSAO
-3.MSAA
-4.Sky Box  
+1.Shadow Mapping  
+2.SSAO  
+3.MSAA  
+4.Sky Box   
 5.PBR  
 6.IBL  
 7.Tool Rendering  
