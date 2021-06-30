@@ -32,9 +32,8 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 4.Sky Box   
 5.PBR  
 6.IBL  
-7.Tool Rendering  
-8.Clipping in Homogeneous Coordinates  
-9.Movable Camera  
+7.Clipping in Homogeneous Coordinates  
+8.Movable Camera  
 
 ### 参考
 1.GAMES101: 现代计算机图形学入门  
