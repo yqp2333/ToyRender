@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camera\camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math\geometry.cpp" />
     <ClCompile Include="model\model.cpp" />
@@ -147,15 +148,18 @@
     <ClCompile Include="pipeline\pipeline.cpp" />
     <ClCompile Include="shader\BlinnPhongShader.cpp" />
     <ClCompile Include="shader\shader.cpp" />
+    <ClCompile Include="time\game_time.cpp" />
     <ClCompile Include="window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera\camera.h" />
     <ClInclude Include="math\geometry.h" />
     <ClInclude Include="model\model.h" />
     <ClInclude Include="model\tgaimage.h" />
     <ClInclude Include="my_gl\my_gl.h" />
     <ClInclude Include="pipeline\pipeline.h" />
     <ClInclude Include="shader\shader.h" />
+    <ClInclude Include="time\game_time.h" />
     <ClInclude Include="window\window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

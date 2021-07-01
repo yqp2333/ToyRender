@@ -1,0 +1,60 @@
+﻿  camera.cpp
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\camera\camera.h(20,21): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\model\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+  main.cpp
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\model\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\camera\camera.h(20,21): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\main.cpp(14,29): warning C4305: “初始化”: 从“double”到“float”截断
+  my_gl.cpp
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\model\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\camera\camera.h(20,21): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(45,20): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(46,10): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(79,49): warning C4244: “+=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(80,50): warning C4244: “+=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(81,50): warning C4244: “+=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(108,24): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(137,12): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(198,35): warning C4244: “+=”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(215,44): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\my_gl\my_gl.cpp(215,39): warning C4244: “参数”: 从“double”转换到“int”，可能丢失数据
+  pipeline.cpp
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\model\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\camera\camera.h(20,21): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\pipeline\pipeline.cpp(9,16): warning C4244: “=”: 从“int”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\pipeline\pipeline.cpp(18,14): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\pipeline\pipeline.cpp(40,29): warning C4244: “初始化”: 从“float”转换到“unsigned int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\pipeline\pipeline.cpp(41,34): warning C4244: “初始化”: 从“float”转换到“unsigned int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\pipeline\pipeline.cpp(42,50): warning C4244: “初始化”: 从“float”转换到“unsigned int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\pipeline\pipeline.cpp(81,39): warning C4305: “参数”: 从“double”到“float”截断
+  shader.cpp
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\model\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\camera\camera.h(20,21): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(39,10): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(75,17): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(79,49): warning C4305: “参数”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(80,27): warning C4244: “参数”: 从“const _Ty”转换到“float”，可能丢失数据
+          with
+          [
+              _Ty=double
+          ]
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(83,16): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(84,18): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(85,27): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\shader\shader.cpp(126,10): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+  window.cpp
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\model\tgaimage.h(60,59): warning C4244: “=”: 从“float”转换到“unsigned char”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\camera\camera.h(20,21): warning C4305: “初始化”: 从“double”到“float”截断
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(26,1): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(48,32): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(48,21): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(105,31): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(105,20): warning C4244: “参数”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(131,14): warning C4244: “初始化”: 从“float”转换到“int”，可能丢失数据
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(126,9): warning C4101: “j”: 未引用的局部变量
+E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\ToyRenderer\window\window.cpp(126,6): warning C4101: “i”: 未引用的局部变量
+  正在生成代码
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 624 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  ToyRenderer.vcxproj -> E:\game_project\ComputerGraphicLearn\ToyRenderer\ToyRenderer\Release\ToyRenderer.exe

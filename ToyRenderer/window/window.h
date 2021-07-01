@@ -1,13 +1,15 @@
 #pragma once
 #include <windows.h>
 #include "..\pipeline\pipeline.h"
+#include"..\camera\camera.h"
+#include <string>
 
 class RenderWindow
 {
 public:
 	RenderWindow(float w_width, float w_height, float i_width, float i_hight);
 	~RenderWindow();
-	int Run(Pipeline pipeline);
+	int Run(Pipeline pipeline,Camera& camera);
 	void destory();
 	HDC get_chdc();
 	bool InitWindowsApp(HINSTANCE instanceHandle, int show);
@@ -24,9 +26,6 @@ private:
 	unsigned char* window_fb;//图片缓存指针
 	LPVOID ptr;//用来传入的图片缓存指针
 
-	DWORD t_now;//time 当前帧
-	DWORD t_pre;//time 下一帧
-
 	float window_height;
 	float window_width;
 
@@ -35,6 +34,7 @@ private:
 
 	void window_draw(unsigned char* framebuffer);//传入framebuff准备绘制
 	void window_display();//绘制图片
+	void CalculateFrameState(Camera& camera);
 
 	void init_bm_header(BITMAPINFOHEADER& bi, int width, int height);
 };

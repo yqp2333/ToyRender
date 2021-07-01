@@ -78,10 +78,11 @@ void RenderWindow::init_bm_header(BITMAPINFOHEADER& bi, int width, int height)
 	bi.biSizeImage = width * height * 4;
 }
 
-int RenderWindow::Run(Pipeline pipeline)
+int RenderWindow::Run(Pipeline pipeline, Camera& camera)
 {
 	Pipeline current_pipeline = pipeline;
 	MSG msg = { 0 };
+	camera.game_time.Reset();
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
 		{
@@ -90,11 +91,10 @@ int RenderWindow::Run(Pipeline pipeline)
 		}
 		else //执行动画或游戏逻辑部分代码
 		{
-			DWORD t_now = GetTickCount();
-			if (t_now - t_pre >= 20)//0.05s
-			{
-				window_draw(current_pipeline.render(chdc));
-			}
+		    camera.game_time.Tick();
+			CalculateFrameState(camera);
+			camera.auto_rotation();
+		    window_draw(current_pipeline.render(chdc));
 		}
 	}
 	return (int)msg.wParam;
@@ -104,7 +104,6 @@ void RenderWindow::window_display(){
 	hdc = GetDC(ghMainWnd);
 	BitBlt(hdc, 0, 0, img_width, img_height, chdc, 0, 0, SRCCOPY);
 	ReleaseDC(ghMainWnd, hdc);
-	DWORD t_pre = GetTickCount();
 }
 
 void RenderWindow::destory()
@@ -149,4 +148,24 @@ RenderWindow::~RenderWindow()
 {
 }
 
+void RenderWindow::CalculateFrameState(Camera& camera)
+{
+	static int frameCnt = 0;
+	static float timeElapsed = 0.0f; //流逝时间
+	frameCnt++;
 
+	if (camera.game_time.TotalTime() - timeElapsed >= 1.0f)
+	{
+		float fps = (float)frameCnt;
+		float mspf = 1000.0f / fps;
+
+		std::wstring fpsStr = std::to_wstring(fps);
+		std::wstring mspfStr = std::to_wstring(mspf);
+
+		std::wstring windowText = L"ToyRenderer  fps:" + fpsStr + L"    mspf" + mspfStr;
+		SetWindowText(ghMainWnd, windowText.c_str());
+
+		frameCnt = 0;
+		timeElapsed += 1.0f;
+	}
+}

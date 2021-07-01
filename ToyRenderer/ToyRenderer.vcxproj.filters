@@ -42,6 +42,12 @@
     <ClCompile Include="shader\BlinnPhongShader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="time\game_time.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model\model.h">
@@ -63,6 +69,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="pipeline\pipeline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="time\game_time.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

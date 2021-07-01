@@ -8,14 +8,14 @@ BlinnPhongShader::BlinnPhongShader(Pipeline& pipeline)
 vec4 BlinnPhongShader::vertex(int num_face, int num_vert)
 {
 	vec4 modle_vert = embed<4>(pipeline.model->vert(num_face, num_vert));
-	vec4 clip_vert = pipeline.M_Perspective * pipeline.M_ModelView * modle_vert;
+	vec4 clip_vert = pipeline.M_Perspective * pipeline.M_View * pipeline.M_Model* modle_vert;
 
 	model_verts.set_col(num_vert, pipeline.model->vert(num_face, num_vert));
 	model_normals.set_col(num_vert, pipeline.model->normal(num_face, num_vert));
 	uvs.set_col(num_vert, pipeline.model->uv(num_face, num_vert));
 
 	//change the viet to light`s view space
-	vec4 light_vert = pipeline.M_Ortho * pipeline.M_ModelLight * embed<4>(pipeline.model->vert(num_face, num_vert));
+	vec4 light_vert = pipeline.M_Ortho * pipeline.M_ModelLight * pipeline.M_Model * embed<4>(pipeline.model->vert(num_face, num_vert));
 	light_vert = light_vert / light_vert[3];
 	light_vert = pipeline.M_ViewPort * embed<4>(light_vert);
 	light_verts.set_col(num_vert,proj<3>(light_vert) );
@@ -58,10 +58,10 @@ bool BlinnPhongShader::fragment(vec3 bar, TGAColor& color)
 
 	//calculatie tangent_normal and transform to view space;
 	vec3 model_tan_normal = M_Model_TBN * pipeline.model->tangent_normal(uv).normalize();
-	vec3 view_normal = proj<3>(pipeline.M_ModelView.invert_transpose() * embed<4>(model_tan_normal,0)).normalize();
+	vec3 view_normal = proj<3>((pipeline.M_View * pipeline.M_Model).invert_transpose() * embed<4>(model_tan_normal,0)).normalize();
 
 	//vec3 view_normal = proj<3>(M_ModelView.invert_transpose() * embed<4>(model->normal(uv),0)).normalize();//法线和光变化到同一空间中进行光照计算,从世界空间法线贴图读取。
-	vec3 view_lightdir = proj<3>(pipeline.M_ModelView * embed<4>(pipeline.lightdir,0)).normalize();//灯光如果是平行光，则不应该有平移变换。法线同理，所以变为齐次坐标时，w=0；
+	vec3 view_lightdir = proj<3>((pipeline.M_View * pipeline.M_Model) * embed<4>(pipeline.lightdir,0)).normalize();//灯光如果是平行光，则不应该有平移变换。法线同理，所以变为齐次坐标时，w=0；
 	vec3 half_vector = (view_normal + view_lightdir).normalize();
 
 	////shadow

@@ -2,12 +2,13 @@
 #include<windows.h>
 #include "..\math\geometry.h"
 #include "..\model\model.h"
+#include"..\camera\camera.h"
 
 class Pipeline
 {
 public:
     Pipeline();
-    Pipeline(const char* model_name, float width, float height, vec3 light, vec3 camera, float fovy, float nearplane, float farplane, HDC chdc);
+    Pipeline(Camera& camera, const char* model_name, float width, float height, vec3 light, float fovy, float nearplane, float farplane, HDC chdc);
     ~Pipeline();
     unsigned char* render(HDC chdc);
     void pass();
@@ -21,7 +22,8 @@ public:
     float* shadowbuffer;
     unsigned char* framebuffer;
 
-    mat<4, 4>  M_ModelView;
+    mat<4, 4>  M_Model;
+    mat<4, 4>  M_View;
     mat<4, 4>  M_Perspective;
     mat<4, 4>  M_Ortho;
     mat<4, 4>  M_ViewPort;
@@ -32,7 +34,6 @@ public:
 
     vec3 light;
     vec3 lightdir;
-    vec3 camera;
     vec3 center;
     vec3 up;
 
@@ -41,6 +42,7 @@ public:
     float farplane;
 
     HDC chdc;
+    Camera& camera;
 
 };
 

@@ -2,6 +2,7 @@
 #include"..\shader\shader.h"
 #include"..\my_gl\my_gl.h"
 
+
 void Pipeline::clear_buffer(float* zbuffer, int init_value)
 {
 	for (int i = 0; i < width * height; i++)
@@ -23,7 +24,7 @@ void Pipeline::clear_framebuffer(unsigned char* framebuffer,int init_value)
 	}
 }
 
-Pipeline::Pipeline(const char* model_name, float width, float height, vec3 light, vec3 camera, float fovy, float nearplane, float farplane, HDC chdc)
+Pipeline::Pipeline(Camera& camera,const char* model_name, float width, float height, vec3 light, float fovy, float nearplane, float farplane, HDC chdc)
 	:width(width),
 	 height(height),
 	 light(lightdir),
@@ -40,6 +41,12 @@ Pipeline::Pipeline(const char* model_name, float width, float height, vec3 light
 	 shadowbuffer = new float[width * height];
 	 framebuffer = new unsigned char[width * height * 4];
 	 lightdir = light.normalize();
+	 M_Model = {{
+	 { 2,       0,      0,      0.},
+	 { 0,       2,      0,      0.},
+	 { 0,       0,      2,      0,},
+	 { 0,       0,      0,      1,}
+     }};
 }
 Pipeline::~Pipeline()
 {
@@ -51,7 +58,7 @@ Pipeline::~Pipeline()
 
 void Pipeline::pass()
 {
-	M_ModelView = lookat(camera, center, up);
+	M_View = camera.get_M_View();
 	M_Perspective = perspective(fovy, width / height, nearplane, farplane); 
 	M_ViewPort = viewport(width, height);
 	BlinnPhongShader shader(*this);
@@ -92,7 +99,7 @@ unsigned char* Pipeline::render(HDC chdc){
 	clear_framebuffer(framebuffer,0);
     clear_buffer(zbuffer,-2000);
 	clear_buffer(shadowbuffer, -2000);
-	shadow_pass();
+	//shadow_pass();
 	pass();
 	return framebuffer;
 }
