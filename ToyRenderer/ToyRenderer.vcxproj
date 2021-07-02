@@ -148,6 +148,7 @@
     <ClCompile Include="pipeline\pipeline.cpp" />
     <ClCompile Include="shader\BlinnPhongShader.cpp" />
     <ClCompile Include="shader\shader.cpp" />
+    <ClCompile Include="shader\skybox_shader.cpp" />
     <ClCompile Include="time\game_time.cpp" />
     <ClCompile Include="window\window.cpp" />
   </ItemGroup>

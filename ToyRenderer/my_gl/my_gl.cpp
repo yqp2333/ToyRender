@@ -120,14 +120,18 @@ vec3 clip(vec4* clip_verts)
 	return vec3();
 }
 
-bool face_culling(vec3* ndc_verts)
+bool face_culling(vec3* ndc_verts,bool is_front = 0)
 {
-    //逆时针 正向
+	//逆时针 正向
     vec3 edge1 = vec3(ndc_verts[1].x - ndc_verts[0].x, ndc_verts[1].y - ndc_verts[0].y, ndc_verts[1].z - ndc_verts[0].z);
 	vec3 edge2 = vec3(ndc_verts[2].x - ndc_verts[0].x, ndc_verts[2].y - ndc_verts[0].y, ndc_verts[2].z - ndc_verts[0].z);
 	vec3 normal = cross(edge2,edge1).normalize();
 	vec3 view =vec3(0,0,-1);
-	return normal * view < 0;
+	if (is_front)
+	{
+	return normal * view > 0;  //front cull
+	}
+	return normal * view < 0;  //back cull
 }
 
 
@@ -141,7 +145,7 @@ static void set_color(unsigned char* framebuffer, int x, int y, unsigned char co
 }
 
 
-void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,float* zbuffer)
+void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,float* zbuffer,bool is_skybox)
 {
 	vec3 p;
 	vec3 ndc_verts[3];
@@ -151,18 +155,24 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 	//perspective division
 	for (int i = 0; i < 3; i++)
 	{
-		if (!clip_verts[i][3])
-		{
-		    continue;
-		}
 		ndc_verts[i] = vec3(clip_verts[i][0]/ clip_verts[i][3], clip_verts[i][1] / clip_verts[i][3], clip_verts[i][2] / clip_verts[i][3]);
 	}
 
 	 
 	//face culling
-	if (face_culling(ndc_verts))
+	if (!is_skybox)
 	{
-	    return;
+		if (face_culling(ndc_verts))//back face culling
+		{
+			 return;
+		}
+	}
+	else
+	{
+		if (face_culling(ndc_verts,1))
+		{
+			//return;
+		}
 	}
 
 	//viewport transformation
@@ -185,17 +195,28 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 	}
 
 	// go through the pixel of boundrayBox
-	for (p.x = boundrayBoxMin.x; p.x <= boundrayBoxMax.x; p.x++){
+    for (p.x = boundrayBoxMin.x; p.x <= boundrayBoxMax.x; p.x++){
 		for (p.y = boundrayBoxMin.y; p.y <= boundrayBoxMax.y; p.y++){
 			// vertex barycentric
+  //for(p.x = 0;p.x<= pipline.width;p.x++){
+	 //for ( p.y = 0; p.y < pipline.height; p.y++){
+
 			vec3 bar = barycentric(view_verts, p);
 			bar = perspective_correct_interpolation(clip_verts,bar);//correct interpolation
 
-			float z = 0;
-			for (int i = 0; i < 3; i++)
+			float z = -1;
+
+			if (is_skybox)
 			{
-				//Using vertex barycentric lerp z_value
-				z += view_verts[i][2] * bar[i];
+				z = -100;//set the z of skybox to max z;
+			}
+			else
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					//Using vertex barycentric lerp z_value
+					z += view_verts[i][2] * bar[i];
+				}
 			}
 
 			float frag_depth = z;//深度一定要是float才能进行深度测试。（如果是整数都重合在一起了）
@@ -203,7 +224,11 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 			if (bar.x < 0 || bar.y < 0 || bar.z < 0 || zbuffer[int(p.x) + int(p.y * pipline.width)] > frag_depth) continue;
 
 			bool discard =  shader.fragment(bar, color);
-			zbuffer[int(p.x + p.y * pipline.width)] = frag_depth;
+
+			//if (!is_skybox)//如果是天空盒，就不写入深度
+			//{
+				zbuffer[int(p.x + p.y * pipline.width)] = frag_depth;
+			//}
 
 			if (!discard)
 			{

@@ -13,10 +13,12 @@ public:
     unsigned char* render(HDC chdc);
     void pass();
     void shadow_pass();
+    void skybox_pass();
     void clear_framebuffer(unsigned char* framebuffer, int init_value);
     void clear_buffer(float* zbuffer, int init_value);
 
     Model* model;
+    Model* skybox;
 
     float* zbuffer;
     float* shadowbuffer;

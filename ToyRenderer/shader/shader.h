@@ -45,3 +45,14 @@ public:
 
 };
 
+class SkyBoxShader : public IShader
+{
+    mat<2, 3> uvs;
+    mat<3, 3> model_verts;
+    Pipeline& pipeline;
+public:
+    SkyBoxShader(Pipeline& pipeline);
+    ~SkyBoxShader();
+    vec4 vertex(int num_face, int num_vert);
+    bool fragment(vec3 bar, TGAColor& color);
+};

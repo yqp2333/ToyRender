@@ -37,6 +37,7 @@ Pipeline::Pipeline(Camera& camera,const char* model_name, float width, float hei
 	 up(vec3(0.0,1.0,0.0))
 {
 	 model = new Model(model_name);
+	 skybox = new Model("obj/skybox/box.obj",1);
 	 zbuffer = new float[width * height];
 	 shadowbuffer = new float[width * height];
 	 framebuffer = new unsigned char[width * height * 4];
@@ -95,11 +96,31 @@ void Pipeline::shadow_pass()
 	}
 }
 
+void Pipeline::skybox_pass()
+{
+	M_View = camera.get_M_View();
+	M_Perspective = perspective(fovy, width / height, nearplane, farplane);
+	M_ViewPort = viewport(width, height);
+	SkyBoxShader shader(*this);
+
+	for (int i = 0; i < skybox->nfaces(); i++)
+	{
+		vec4 clip_verts[3];
+		for (int j = 0; j < 3; j++)
+		{
+			clip_verts[j] = shader.vertex(i, j);
+		}
+		rasterize_triangle(clip_verts, shader, *this, zbuffer,1);
+	}
+}
+
 unsigned char* Pipeline::render(HDC chdc){
-	clear_framebuffer(framebuffer,0);
-    clear_buffer(zbuffer,-2000);
-	clear_buffer(shadowbuffer, -2000);
-	//shadow_pass();
+	clear_framebuffer(framebuffer,100);
+    clear_buffer(zbuffer,-100);
+	clear_buffer(shadowbuffer,-1);
 	pass();
+	//skybox_pass();
+	//shadow_pass();
+
 	return framebuffer;
 }

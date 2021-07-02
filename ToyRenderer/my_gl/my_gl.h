@@ -14,11 +14,10 @@ mat<4, 4> viewport(float width, float height);
 vec3 barycentric(vec3* viewport_verts, vec3 p);
 vec3 perspective_correct_interpolation(vec4* clip_verts, vec3 bar);
 vec3 clip(vec4* clip_verts);
-bool face_culling(vec3* ndc_verts);
 
 void set_color(unsigned char* framebuffer, int x, int y, unsigned char color[], float width, float height);
 
 float smoothstep(float edge0, float edge1, float x);
 TGAColor lerp(TGAColor a, TGAColor b, float value);
 
-void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline, float* zbuffer);
+void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline, float* zbuffe, bool is_skybox = 0 );

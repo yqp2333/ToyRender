@@ -128,3 +128,4 @@ bool ShadowMapping::fragment(vec3 bar, TGAColor& color)
 	color = TGAColor(255, 255, 255) * z;
 	return true;
 }
+

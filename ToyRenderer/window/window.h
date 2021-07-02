@@ -4,6 +4,7 @@
 #include"..\camera\camera.h"
 #include <string>
 
+
 class RenderWindow
 {
 public:
@@ -13,9 +14,13 @@ public:
 	void destory();
 	HDC get_chdc();
 	bool InitWindowsApp(HINSTANCE instanceHandle, int show);
+	HWND ghMainWnd = 0;
+
+	float img_width;
+	float img_height;
 private:
     //主窗口句柄
-	HWND ghMainWnd = 0;
+	
 	
 	HDC hdc;//设备句柄
 	HDC chdc;//兼容设备句柄
@@ -28,9 +33,6 @@ private:
 
 	float window_height;
 	float window_width;
-
-	float img_width;
-	float img_height;
 
 	void window_draw(unsigned char* framebuffer);//传入framebuff准备绘制
 	void window_display();//绘制图片

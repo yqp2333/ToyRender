@@ -16,11 +16,12 @@ private:
 	TGAImage normalmap_;
 	TGAImage tangentNormalmap_;
 	TGAImage specularmap_;
+	TGAImage cubemap_[6];
 
 	void load_texture(std::string filename, const char* suffix, TGAImage& img);
 
 public:
-	Model(const char *filename);
+	Model(const char *filename, bool skybox = 0);
 	~Model();
 
 	int nverts();
@@ -34,6 +35,7 @@ public:
 	vec3 normal(vec2 uv);
 	vec3 tangent_normal(vec2 uv);
 	double specular(vec2 uv);
+	TGAColor cubemap(int index,vec2 uv);
 };
 
 #endif //__MODEL_H__

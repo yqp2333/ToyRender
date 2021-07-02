@@ -33,9 +33,6 @@
     <ClCompile Include="my_gl\my_gl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="shader\shader.cpp">
-      <Filter>头文件</Filter>
-    </ClCompile>
     <ClCompile Include="pipeline\pipeline.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -46,6 +43,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="camera\camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shader\skybox_shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shader\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

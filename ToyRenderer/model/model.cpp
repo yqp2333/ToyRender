@@ -5,7 +5,7 @@
 #include <vector>
 #include "model.h"
 
-Model::Model(const char *filename) : verts_(), faces_() ,uvs_(),diffusemap_(){
+Model::Model(const char *filename, bool skybox) : verts_(), faces_() ,uvs_(),diffusemap_(){
     std::ifstream in;
     in.open (filename, std::ifstream::in);
     if (in.fail()) return;
@@ -56,6 +56,15 @@ Model::Model(const char *filename) : verts_(), faces_() ,uvs_(),diffusemap_(){
     load_texture(filename,"_nm.tga",normalmap_);
     load_texture(filename, "_spec.tga", specularmap_);
     load_texture(filename, "_nm_tangent.tga", tangentNormalmap_);
+    if (skybox)
+    {
+        load_texture(filename, "_front1.tga", cubemap_[0]);
+        load_texture(filename, "_back1.tga", cubemap_[1]);
+        load_texture(filename, "_top1.tga", cubemap_[2]);
+        load_texture(filename, "_bottom1.tga", cubemap_[3]);
+        load_texture(filename, "_left1.tga", cubemap_[4]);
+        load_texture(filename, "_right1.tga", cubemap_[5]);
+    }
     in.close();
     std::cerr << "# v# " << verts_.size() << " f# "  << faces_.size() << std::endl;
 }
@@ -109,6 +118,15 @@ TGAColor Model::diffuse(vec2 uv){
 double Model::specular(vec2 uv)
 {
     return specularmap_.get(uv[0], uv[1])[0];
+}
+
+TGAColor Model::cubemap(int index, vec2 uv)
+{
+    uv[0] = fmod(uv[0], 1);
+    uv[1] = fmod(uv[1], 1);
+    float uv_1 = uv.x* cubemap_[index].get_width();
+    float uv_2 = uv.y* cubemap_[index].get_height();
+    return cubemap_[index].get(uv_1,uv_2);
 }
 
 vec3 Model::tangent_normal(vec2 uv){

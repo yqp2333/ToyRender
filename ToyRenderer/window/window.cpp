@@ -84,6 +84,8 @@ int RenderWindow::Run(Pipeline pipeline, Camera& camera)
 	MSG msg = { 0 };
 	camera.game_time.Reset();
 	while (msg.message != WM_QUIT) {
+
+		handle_events(camera);
 		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
@@ -93,9 +95,13 @@ int RenderWindow::Run(Pipeline pipeline, Camera& camera)
 		{
 		    camera.game_time.Tick();
 			CalculateFrameState(camera);
-			camera.auto_rotation();
+			//camera.auto_rotation();
 		    window_draw(current_pipeline.render(chdc));
+			camera.wheel_delta = 0;
+			camera.orbit_delta = vec2(0, 0);
+			camera.fv_delta = vec2(0, 0);
 		}
+	
 	}
 	return (int)msg.wParam;
 }
@@ -169,3 +175,4 @@ void RenderWindow::CalculateFrameState(Camera& camera)
 		timeElapsed += 1.0f;
 	}
 }
+
