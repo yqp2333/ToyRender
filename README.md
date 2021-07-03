@@ -23,10 +23,13 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 9.Tangent space normal mapping  
 10.Perspective-Correct Interpolation  
 11.Movable Camera  
-![1](https://user-images.githubusercontent.com/74462917/123964665-a3e3ef00-d9ee-11eb-934c-58418ac3bd56.png)
+12.Shadow Mapping  
+![toyrenderer1](https://user-images.githubusercontent.com/74462917/124359974-2f18eb00-dc62-11eb-9c05-70b0fa9d5c0f.png)
+![toyrenderer2](https://user-images.githubusercontent.com/74462917/124359975-304a1800-dc62-11eb-8f0a-f5f7d513fa42.png)
+
 
 ### 计划实现功能（開発予定）
-1.Shadow Mapping  
+ 
 2.SSAO  
 3.Sky Box   
 4.PBR  
