@@ -5,7 +5,16 @@
 #include <vector>
 #include "model.h"
 
-Model::Model(const char *filename, bool skybox) : verts_(), faces_() ,uvs_(),diffusemap_(){
+Model::Model(const char *filename, bool skybox) 
+: verts_(), 
+  faces_(), 
+  uvs_(), 
+  normals_(),
+  diffusemap_(), 
+  normalmap_(), 
+  tangentNormalmap_(), 
+  specularmap_()
+{
     std::ifstream in;
     in.open (filename, std::ifstream::in);
     if (in.fail()) return;
@@ -56,14 +65,15 @@ Model::Model(const char *filename, bool skybox) : verts_(), faces_() ,uvs_(),dif
     load_texture(filename,"_nm.tga",normalmap_);
     load_texture(filename, "_spec.tga", specularmap_);
     load_texture(filename, "_nm_tangent.tga", tangentNormalmap_);
+
     if (skybox)
     {
-        load_texture(filename, "_front1.tga", cubemap_[0]);
-        load_texture(filename, "_back1.tga", cubemap_[1]);
-        load_texture(filename, "_top1.tga", cubemap_[2]);
-        load_texture(filename, "_bottom1.tga", cubemap_[3]);
-        load_texture(filename, "_left1.tga", cubemap_[4]);
-        load_texture(filename, "_right1.tga", cubemap_[5]);
+        load_texture(filename, "_right1.tga", cubemap_[0]);//x
+        load_texture(filename, "_left1.tga", cubemap_[1]);//-x
+        load_texture(filename, "_top1.tga", cubemap_[2]);//y
+        load_texture(filename, "_bottom1.tga", cubemap_[3]);//-y
+        load_texture(filename, "_back1.tga", cubemap_[4]);//z
+        load_texture(filename, "_front1.tga", cubemap_[5]);//-z
     }
     in.close();
     std::cerr << "# v# " << verts_.size() << " f# "  << faces_.size() << std::endl;

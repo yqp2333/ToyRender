@@ -1,5 +1,6 @@
 #include"game_time.h"
 
+GameTime GameTime::instance;
 GameTime::GameTime() :
     mSencondsPerCount(0.0),
     mDeltaTime(-1.0),
@@ -13,6 +14,10 @@ GameTime::GameTime() :
     __int64 countsPerSec;
     QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
     mSencondsPerCount = 1.0 / (double)countsPerSec;//每个计数所代表的秒数
+}
+
+GameTime::~GameTime()
+{
 }
 
 void GameTime::Tick()

@@ -32,7 +32,7 @@ mat<4, 4> viewport(float width, float height) {
 
 	{ width/2.,          0 ,     0,   width/ 2.},
 	{        0,    height/2.,    0,   height/2.},
-	{        0,           0,     1,         0},
+	{        0,           0,     1,           0},
 	{        0,           0,     0,          1 }
 
 	}};
@@ -83,7 +83,6 @@ TGAColor lerp(TGAColor a, TGAColor b, float value)
 	return color;
 }
 
-
 float smoothstep(float edge0, float edge1, float x)
 {
     x = (std::min)((std::max)(0.0f,(x - edge0) / (edge1 - edge0)), 1.0f);
@@ -129,11 +128,11 @@ bool face_culling(vec3* ndc_verts,bool is_front = 0)
 	vec3 view =vec3(0,0,-1);
 	if (is_front)
 	{
-	return normal * view > 0;  //front cull
+	return normal * view >= 0;  //front cull
 	}
-	return normal * view < 0;  //back cull
+	return normal * view <= 0;  //back cull
 }
-
+ 
 
 static void set_color(unsigned char* framebuffer, int x, int y, unsigned char color[],float width,float height)
 {
@@ -158,20 +157,12 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 		ndc_verts[i] = vec3(clip_verts[i][0]/ clip_verts[i][3], clip_verts[i][1] / clip_verts[i][3], clip_verts[i][2] / clip_verts[i][3]);
 	}
 
-	 
 	//face culling
 	if (!is_skybox)
 	{
 		if (face_culling(ndc_verts))//back face culling
 		{
 			 return;
-		}
-	}
-	else
-	{
-		if (face_culling(ndc_verts,1))
-		{
-			//return;
 		}
 	}
 
@@ -181,6 +172,7 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 		view_verts[i] = proj<3>(pipline.M_ViewPort * embed<4>(ndc_verts[i]));
 		view_verts[i][0] = int(view_verts[i][0]);//x、y一定要取整，要不然生成的图会有缝隙
 		view_verts[i][1] = int(view_verts[i][1]);
+
 	}
 
 	//boundrayBox check
@@ -195,41 +187,31 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 	}
 
 	// go through the pixel of boundrayBox
-    for (p.x = boundrayBoxMin.x; p.x <= boundrayBoxMax.x; p.x++){
+     for (p.x = boundrayBoxMin.x; p.x <= boundrayBoxMax.x; p.x++){
 		for (p.y = boundrayBoxMin.y; p.y <= boundrayBoxMax.y; p.y++){
-			// vertex barycentric
-  //for(p.x = 0;p.x<= pipline.width;p.x++){
-	 //for ( p.y = 0; p.y < pipline.height; p.y++){
-
+	        // vertex barycentric
 			vec3 bar = barycentric(view_verts, p);
 			bar = perspective_correct_interpolation(clip_verts,bar);//correct interpolation
 
-			float z = -1;
-
+			// deth testing
+			float z = 0;
 			if (is_skybox)
 			{
-				z = -100;//set the z of skybox to max z;
+			   z = -10;//set the z of skybox to max z;
 			}
 			else
 			{
 				for (int i = 0; i < 3; i++)
 				{
-					//Using vertex barycentric lerp z_value
-					z += view_verts[i][2] * bar[i];
+					z += view_verts[i][2] * bar[i];//Using vertex barycentric lerp z_value
 				}
 			}
-
 			float frag_depth = z;//深度一定要是float才能进行深度测试。（如果是整数都重合在一起了）
-
 			if (bar.x < 0 || bar.y < 0 || bar.z < 0 || zbuffer[int(p.x) + int(p.y * pipline.width)] > frag_depth) continue;
+			zbuffer[int(p.x + p.y * pipline.width)] = frag_depth;
 
-			bool discard =  shader.fragment(bar, color);
-
-			//if (!is_skybox)//如果是天空盒，就不写入深度
-			//{
-				zbuffer[int(p.x + p.y * pipline.width)] = frag_depth;
-			//}
-
+			// fragment shader
+			bool discard = shader.fragment(bar, color);
 			if (!discard)
 			{
 			   unsigned char c[3];

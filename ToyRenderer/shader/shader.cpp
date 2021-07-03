@@ -1,21 +1,23 @@
 #include"shader.h"
 #include "..\my_gl\my_gl.h"
 
-BlinnPhongShader::BlinnPhongShader(Pipeline& pipeline)
-    :pipeline(pipeline)
+BlinnPhongShader::BlinnPhongShader(Pipeline& pipeline,Model& model,mat<4, 4>& M_Model)
+    :pipeline(pipeline),
+	 model(model),
+	 M_Model(M_Model)
 	 {}
 
 vec4 BlinnPhongShader::vertex(int num_face, int num_vert)
 {
-	vec4 modle_vert = embed<4>(pipeline.model->vert(num_face, num_vert));
-	vec4 clip_vert = pipeline.M_Perspective * pipeline.M_View * pipeline.M_Model* modle_vert;
+	vec4 modle_vert = embed<4>(model.vert(num_face, num_vert));
+	vec4 clip_vert = pipeline.M_Perspective * pipeline.M_View * M_Model* modle_vert;
 
-	model_verts.set_col(num_vert, pipeline.model->vert(num_face, num_vert));
-	model_normals.set_col(num_vert, pipeline.model->normal(num_face, num_vert));
-	uvs.set_col(num_vert, pipeline.model->uv(num_face, num_vert));
+	model_verts.set_col(num_vert, model.vert(num_face, num_vert));
+	model_normals.set_col(num_vert, model.normal(num_face, num_vert));
+	uvs.set_col(num_vert, model.uv(num_face, num_vert));
 
 	//change the viet to light`s view space
-	vec4 light_vert = pipeline.M_Ortho * pipeline.M_ModelLight * pipeline.M_Model * embed<4>(pipeline.model->vert(num_face, num_vert));
+	vec4 light_vert = pipeline.M_Ortho * pipeline.M_ModelLight * M_Model * embed<4>(model.vert(num_face, num_vert));
 	light_vert = light_vert / light_vert[3];
 	light_vert = pipeline.M_ViewPort * embed<4>(light_vert);
 	light_verts.set_col(num_vert,proj<3>(light_vert) );
@@ -57,34 +59,41 @@ bool BlinnPhongShader::fragment(vec3 bar, TGAColor& color)
 	M_Model_TBN.set_col(2, normal);
 
 	//calculatie tangent_normal and transform to view space;
-	vec3 model_tan_normal = M_Model_TBN * pipeline.model->tangent_normal(uv).normalize();
-	vec3 view_normal = proj<3>((pipeline.M_View * pipeline.M_Model).invert_transpose() * embed<4>(model_tan_normal,0)).normalize();
+	vec3 model_tan_normal = M_Model_TBN * model.tangent_normal(uv).normalize();
+	vec3 view_normal = proj<3>((pipeline.M_View * M_Model).invert_transpose() * embed<4>(model_tan_normal,0)).normalize();
 
 	//vec3 view_normal = proj<3>(M_ModelView.invert_transpose() * embed<4>(model->normal(uv),0)).normalize();//法线和光变化到同一空间中进行光照计算,从世界空间法线贴图读取。
-	vec3 view_lightdir = proj<3>((pipeline.M_View * pipeline.M_Model) * embed<4>(pipeline.lightdir,0)).normalize();//灯光如果是平行光，则不应该有平移变换。法线同理，所以变为齐次坐标时，w=0；
+	vec3 view_lightdir = proj<3>((pipeline.M_View * M_Model) * embed<4>(pipeline.lightdir,0)).normalize();//灯光如果是平行光，则不应该有平移变换。法线同理，所以变为齐次坐标时，w=0；
 	vec3 half_vector = (view_normal + view_lightdir).normalize();
 
-	////shadow
-	//vec3 light_vert = light_verts * bar;
-	//int index = int(light_vert[0])+ int(light_vert[1] * pipeline.width);
-	//float shadow_intensity;
+	//shadow
+	vec3 light_vert = light_verts * bar;
+	int index = int(light_vert[0])+ int(light_vert[1] * pipeline.width);
+	float shadow_intensity;
+	if (index > 512000 or index <0)
+	{
+		shadow_intensity = 1;
+	}
+	else
+	{
+		shadow_intensity = 0.3 + 0.7 * (pipeline.shadowbuffer[index] < light_vert[2]);
+	}
 
-	//shadow_intensity = 0.3 + 0.7 * (pipeline.shadowbuffer[index] < light_vert[2]);
 
 	TGAColor ambient;
 	float ka = 0.07;
 	ambient = light_color * ka;
 
 	TGAColor diffuse ;//lambert model
-	TGAColor kd = pipeline.model->diffuse(uv) * 0.8;
+	TGAColor kd = model.diffuse(uv) * 0.8;
 	diffuse = kd * (std::max)(0., view_lightdir * view_normal);
 
 	TGAColor specular = TGAColor(100, 100, 100);
 	float ks = 0.3;
-	float shininess = pipeline.model->specular(uv);
+	float shininess = model.specular(uv);
 	specular = specular * pow((std::max)(0., half_vector * view_normal), shininess) * ks;
 
-	color = (ambient + diffuse + specular) * light_color;//* shadow_intensity; //TGAColor(255, 255, 255) * (light_vert[2]*0.5+0.5);//
+	color = (ambient + diffuse + specular) * light_color; //* shadow_intensity; //TGAColor(255, 255, 255) * (light_vert[2]*0.5+0.5);//
 	return false;
 }
 
@@ -97,8 +106,10 @@ IShader::~IShader()
 }
 
 
-ShadowMapping::ShadowMapping(Pipeline& pipeline)
-	:pipeline(pipeline)
+ShadowMapping::ShadowMapping(Pipeline& pipeline,Model& model, mat<4, 4>& M_Model)
+	:pipeline(pipeline),
+	 model(model),
+	 M_Model(M_Model)
 {}
 
 
@@ -108,14 +119,13 @@ ShadowMapping::~ShadowMapping()
 
 vec4 ShadowMapping::vertex(int num_face, int num_vert)
 {   
-	vec4 modle_vert = embed<4>(pipeline.model->vert(num_face, num_vert));
-	vec4 clip_vert = pipeline.M_Ortho * pipeline.M_ModelLight * modle_vert;
+	vec4 modle_vert = embed<4>(model.vert(num_face, num_vert));
+	vec4 clip_vert = pipeline.M_Ortho * pipeline.M_ModelLight * M_Model*modle_vert;
 
 	vec4 light_vert = clip_vert / clip_vert[3];
-	//light_vert = pipeline.M_ViewPort * embed<4>(light_vert);
 	light_verts.set_col(num_vert, proj<3>(light_vert));
 
-	uvs.set_col(num_vert, pipeline.model->uv(num_face, num_vert));
+	uvs.set_col(num_vert, model.uv(num_face, num_vert));
 	return clip_vert;
 }
 
@@ -125,7 +135,7 @@ bool ShadowMapping::fragment(vec3 bar, TGAColor& color)
 	vec3 light_vert = light_verts * bar;
 	float z = (light_vert.z)* 0.5 + 0.5;
 
-	color = TGAColor(255, 255, 255) * z;
-	return true;
+	color = TGAColor(255, 255, 255);
+	return false;
 }
 

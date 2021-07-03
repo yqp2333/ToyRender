@@ -22,14 +22,15 @@ class  BlinnPhongShader : public IShader
     mat<3, 3> light_verts;
 
     Pipeline& pipeline;
-    
+    Model& model;
+    mat<4, 4>& M_Model;
+
 public:
     BlinnPhongShader();
-    BlinnPhongShader(Pipeline& pipeline);
+    BlinnPhongShader(Pipeline& pipeline,Model& model,mat<4,4>& M_Model);
 
     vec4 vertex(int num_face, int num_vert);
     bool fragment(vec3 bar, TGAColor& color);
-
 };
 
 class ShadowMapping : public IShader
@@ -37,12 +38,13 @@ class ShadowMapping : public IShader
     mat<2, 3> uvs;
     mat<3, 3> light_verts;
     Pipeline& pipeline;
+    Model& model;
+    mat<4, 4>& M_Model;
 public:
-    ShadowMapping(Pipeline& pipeline);
+    ShadowMapping(Pipeline& pipeline, Model& model, mat<4, 4>& M_Model);
     ~ShadowMapping();
     vec4 vertex(int num_face, int num_vert);
     bool fragment(vec3 bar, TGAColor& color);
-
 };
 
 class SkyBoxShader : public IShader
@@ -50,8 +52,10 @@ class SkyBoxShader : public IShader
     mat<2, 3> uvs;
     mat<3, 3> model_verts;
     Pipeline& pipeline;
+    Model& model;
+    mat<4, 4>& M_Model;
 public:
-    SkyBoxShader(Pipeline& pipeline);
+    SkyBoxShader(Pipeline& pipeline, Model& model, mat<4, 4>& M_Model);
     ~SkyBoxShader();
     vec4 vertex(int num_face, int num_vert);
     bool fragment(vec3 bar, TGAColor& color);

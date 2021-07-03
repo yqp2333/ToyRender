@@ -1,7 +1,7 @@
 #include "camera.h"
 #include"../my_gl/my_gl.h"
 
-Camera::Camera(vec3 eye, vec3 center, vec3 up, GameTime& game_time)
+Camera::Camera(vec3 eye, vec3 center, vec3 up)
 : eye(eye),
   center(center),
   up(up),

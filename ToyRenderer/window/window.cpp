@@ -3,6 +3,7 @@
 LRESULT CALLBACK
 WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+
 bool RenderWindow::InitWindowsApp(HINSTANCE instanceHandle, int show)
 {
 	WNDCLASS wc;
@@ -29,8 +30,8 @@ bool RenderWindow::InitWindowsApp(HINSTANCE instanceHandle, int show)
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		window_width,//窗口高度 nWidth
-		window_height,//窗口高度 nHeight
+		width,//窗口高度 nWidth
+		height,//窗口高度 nHeight
 		0,
 		0,
 		instanceHandle, 
@@ -45,7 +46,7 @@ bool RenderWindow::InitWindowsApp(HINSTANCE instanceHandle, int show)
 
 	//init bmp header
 	BITMAPINFOHEADER bi;
-	init_bm_header(bi, img_width, img_height);
+	init_bm_header(bi, width, height);
 
 	//registe DC
 	hdc = GetDC(ghMainWnd);
@@ -78,11 +79,17 @@ void RenderWindow::init_bm_header(BITMAPINFOHEADER& bi, int width, int height)
 	bi.biSizeImage = width * height * 4;
 }
 
-int RenderWindow::Run(Pipeline pipeline, Camera& camera)
+
+RenderWindow::RenderWindow(float width, float height)
+:width(width),height(height)
+{
+}
+
+int RenderWindow::Run(Pipeline& pipeline, Camera& camera)
 {
 	Pipeline current_pipeline = pipeline;
 	MSG msg = { 0 };
-	camera.game_time.Reset();
+	game_time.Reset();
 	while (msg.message != WM_QUIT) {
 
 		handle_events(camera);
@@ -93,22 +100,31 @@ int RenderWindow::Run(Pipeline pipeline, Camera& camera)
 		}
 		else //执行动画或游戏逻辑部分代码
 		{
-		    camera.game_time.Tick();
+		    game_time.Tick();
+
 			CalculateFrameState(camera);
-			//camera.auto_rotation();
-		    window_draw(current_pipeline.render(chdc));
+
+			if (model_index == 0)
+			{
+				window_draw(current_pipeline.render_2(chdc));
+			}
+			else
+			{
+				window_draw(current_pipeline.render(chdc));
+			}
+
+			//reset 
 			camera.wheel_delta = 0;
 			camera.orbit_delta = vec2(0, 0);
 			camera.fv_delta = vec2(0, 0);
 		}
-	
 	}
 	return (int)msg.wParam;
 }
 
 void RenderWindow::window_display(){
 	hdc = GetDC(ghMainWnd);
-	BitBlt(hdc, 0, 0, img_width, img_height, chdc, 0, 0, SRCCOPY);
+	BitBlt(hdc, 0, 0, width, height, chdc, 0, 0, SRCCOPY);
 	ReleaseDC(ghMainWnd, hdc);
 }
 
@@ -119,22 +135,16 @@ void RenderWindow::destory()
 	DeleteObject(bmp);
 	DeleteObject(bmp_old);
 	DeleteDC(chdc);
-
-}
-
-HDC RenderWindow::get_chdc()
-{
-	return chdc;
 }
 
 void RenderWindow::window_draw(unsigned char* framebuffer) //framebuffer to window_fb
 {
 	int i, j;
-	for (int i = 0; i < img_height; i++)
+	for (int i = 0; i < height; i++)
 	{
-		for (int j = 0; j < img_width; j++)
+		for (int j = 0; j < width; j++)
 		{
-			int index = (i * img_width + j) * 4;
+			int index = (i * width + j) * 4;
 			window_fb[index] = framebuffer[index + 2];
 			window_fb[index + 1] = framebuffer[index + 1];
 			window_fb[index + 2] = framebuffer[index];
@@ -142,13 +152,6 @@ void RenderWindow::window_draw(unsigned char* framebuffer) //framebuffer to wind
 	}
 	window_display();
 }
-
-RenderWindow::RenderWindow(float w_width, float w_height, float i_width, float i_hight)
-	:window_width(w_width),
-	window_height(w_height),
-	img_width(i_width),
-	img_height(i_hight)
-	{}
 
 RenderWindow::~RenderWindow()
 {
@@ -160,7 +163,7 @@ void RenderWindow::CalculateFrameState(Camera& camera)
 	static float timeElapsed = 0.0f; //流逝时间
 	frameCnt++;
 
-	if (camera.game_time.TotalTime() - timeElapsed >= 1.0f)
+	if (game_time.TotalTime() - timeElapsed >= 1.0f)
 	{
 		float fps = (float)frameCnt;
 		float mspf = 1000.0f / fps;

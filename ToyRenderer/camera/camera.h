@@ -4,14 +4,14 @@
 class Camera
 {
 public:
-	Camera(vec3 eye, vec3 center, vec3 up,GameTime& game_time);
+	Camera(vec3 eye, vec3 center, vec3 up);
 	~Camera();
 
 	mat<4,4>get_M_View();
 	void auto_rotation();
 	HWND window;
 
-	GameTime& game_time;
+	GameTime& game_time = GameTime::GetInstance();
 
 	//mouse
 	char mouse_buttons[2];
