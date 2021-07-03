@@ -7,12 +7,12 @@ const float width = 800;
 const float height = 640;
 
 const vec3 light = vec3(1, 1, 1);
-const vec3 eye(2, 2,5);
+const vec3 eye(1, 1,3);
 const vec3 center(0, 0, 0);
 const vec3 up(0, 1, 0);
 
-const float nearplane = -1;
-const float farplane = -10000;
+const float nearplane = -1.;
+const float farplane = -10000.;
 const float fovy = 60;
 
 const char* model_name= "obj/diablo3_pose.obj";
@@ -72,6 +72,36 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			 else
 			 {
 				 my_window.model_index = 0;
+			 }
+		 }
+		 else if (wParam == VK_TAB) {
+			 if (my_window.model_index == 0)
+			 {
+				 my_window.model_index = 1;
+			 }
+			 else
+			 {
+				 my_window.model_index = 0;
+			 }
+		 }
+		 else if (wParam == VK_CONTROL) {
+			 if (my_window.is_shadow == 0)
+			 {
+				 my_window.is_shadow = 1;
+			 }
+			 else
+			 {
+				 my_window.is_shadow = 0;
+			 }
+		 }
+		 else  if (wParam == VK_SHIFT) {
+			 if (my_window.is_skybox == 0)
+			 {
+				 my_window.is_skybox = 1;
+			 }
+			 else
+			 {
+				 my_window.is_skybox = 0;
 			 }
 		 }
 		 return 0;

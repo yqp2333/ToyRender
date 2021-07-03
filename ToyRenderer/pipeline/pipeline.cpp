@@ -8,6 +8,12 @@ mat<4,4> M_Model = { {
 { 0,       0,      1,      0,},
 { 0,       0,      0,      1,}
 } };
+mat<4, 4> M_Model_eye = { {
+{ 1,       0,      0,      0.},
+{ 0,       1,      0,      0},
+{ 0,       0,      1,      0,},
+{ 0,       0,      0,      1,}
+} };
 
 mat<4, 4> M_Model_Floor = { {
 { 2,       0,      0,      0.},
@@ -15,6 +21,14 @@ mat<4, 4> M_Model_Floor = { {
 { 0,       0,      2,      0,},
 { 0,       0,      0,      1,}
 } };
+
+mat<4, 4> M_Model_diablo3 = { {
+{ 1.2,       0,      0,      0.},
+{ 0,       1.2,      0,      0.},
+{ 0,       0,      1.2,      0,},
+{ 0,       0,      0,      1,}
+} };
+
 
 void Pipeline::clear_buffer(float* zbuffer, int init_value)
 {
@@ -48,8 +62,9 @@ Pipeline::Pipeline(Camera& camera,const char* model_name, float width, float hei
 	 chdc(chdc),
 	 model_name(model_name)
 {
-     model_1 = new Model(model_name);
-	 model_2 = new Model("obj/african_head.obj");
+     model_1_1 = new Model("obj/african_head.obj");
+	 model_1_2 = new Model("obj/african_head_eye_inner.obj");
+	 model_2 = new Model(model_name);
 	 skybox = new Model("obj/skybox/box.obj",1);
 	 floor = new Model("obj/floor.obj");
 
@@ -61,7 +76,7 @@ Pipeline::Pipeline(Camera& camera,const char* model_name, float width, float hei
 }
 Pipeline::~Pipeline()
 {
-	delete model_1;
+	delete model_1_1;
 	delete skybox;
 	delete floor;
 	delete zbuffer;
@@ -87,7 +102,7 @@ void Pipeline::pass(Model& model,mat<4,4>& M_Model)
 void Pipeline::shadow_pass(Model& model,mat<4, 4>& M_Model)
 {
 	M_ModelLight = lookat(light,vec3(0,0,0),vec3(0,1,0));
-	M_Ortho = ortho(-2,2,2,-2, -0.1, -5.0);
+	M_Ortho = ortho(-1,1,1,-1, -0.1, -10000);
 	ShadowMapping shader(*this, model,M_Model);
 	for (int i = 0; i < model.nfaces(); i++)
 	{
@@ -115,43 +130,38 @@ void Pipeline::skybox_pass(Model& model)
 	}
 }
 
-unsigned char* Pipeline::render(HDC chdc){
+unsigned char* Pipeline::render(HDC chdc,int model_index, bool is_shadow, bool is_skybox){
 	M_View = camera.get_M_View();
 	M_Perspective = perspective(fovy, width / height, nearplane, farplane);
 	M_ViewPort = viewport(width, height);
 
-	clear_framebuffer(framebuffer,100.);
-    clear_buffer(zbuffer,-1);
-	clear_buffer(shadowbuffer, -1);
+	clear_framebuffer(framebuffer, 50);
+	clear_buffer(zbuffer, -100);
+	clear_buffer(shadowbuffer, -100);
 
-	//shadow_pass(*model_1);
-	//shadow_pass(*floor);
+	if (model_index == 0)
+	{
+		if (is_shadow)
+		{
+			shadow_pass(*model_1_1, M_Model);
+		}
 
-	pass(*model_2, M_Model);
-	//pass(*floor, M_Model_Floor);
+		pass(*model_1_1, M_Model);
+		pass(*model_1_2, M_Model_eye);
 
+	}
+	else if(model_index == 1)
+	{
+		if (is_shadow)
+		{
+			shadow_pass(*model_2, M_Model_diablo3);
+		}
+		pass(*model_2, M_Model_diablo3);
 
-	//skybox_pass(*skybox);
-	return framebuffer;
-}
+	}
 
-unsigned char* Pipeline::render_2(HDC chdc)
-{
-	M_View = camera.get_M_View();
-	M_Perspective = perspective(fovy, width / height, nearplane, farplane);
-	M_ViewPort = viewport(width, height);
+	//if (is_skybox)
+		//skybox_pass(*skybox);
 
-	clear_framebuffer(framebuffer, 100.);
-	clear_buffer(zbuffer, -1);
-	clear_buffer(shadowbuffer, -1);
-
-	//shadow_pass(*model_1);
-	//shadow_pass(*floor);
-
-	pass(*model_1, M_Model);
-	//pass(*floor, M_Model_Floor);
-
-
-	//skybox_pass(*skybox);
 	return framebuffer;
 }

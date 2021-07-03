@@ -16,6 +16,9 @@ public:
 	bool InitWindowsApp(HINSTANCE instanceHandle, int show);
 	void destory();
 	int model_index = 0;
+	bool is_shadow = false;
+	bool is_skybox = false;
+
 private:
 
 	float width;

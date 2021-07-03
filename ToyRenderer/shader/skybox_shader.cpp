@@ -26,7 +26,7 @@ vec4 SkyBoxShader::vertex(int num_face, int num_vert)
 	return clip_vert;
 }
 
-bool SkyBoxShader::fragment(vec3 bar, TGAColor& color)
+bool SkyBoxShader::fragment(vec3 bar, TGAColor& color, vec3* viewport_verts)
 {
 	vec3 model_pos = model_verts *  bar;
 	vec2 uv;

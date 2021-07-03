@@ -83,6 +83,13 @@ TGAColor lerp(TGAColor a, TGAColor b, float value)
 	return color;
 }
 
+float lerp(float a , float b, float value)
+{
+    float x = 0;
+	x += (b - a) * value;
+	return x;
+}
+
 float smoothstep(float edge0, float edge1, float x)
 {
     x = (std::min)((std::max)(0.0f,(x - edge0) / (edge1 - edge0)), 1.0f);
@@ -154,7 +161,7 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 	//perspective division
 	for (int i = 0; i < 3; i++)
 	{
-		ndc_verts[i] = vec3(clip_verts[i][0]/ clip_verts[i][3], clip_verts[i][1] / clip_verts[i][3], clip_verts[i][2] / clip_verts[i][3]);
+		ndc_verts[i] =vec3(clip_verts[i][0]/ clip_verts[i][3], clip_verts[i][1] / clip_verts[i][3], clip_verts[i][2] / clip_verts[i][3]);
 	}
 
 	//face culling
@@ -172,7 +179,6 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 		view_verts[i] = proj<3>(pipline.M_ViewPort * embed<4>(ndc_verts[i]));
 		view_verts[i][0] = int(view_verts[i][0]);//x、y一定要取整，要不然生成的图会有缝隙
 		view_verts[i][1] = int(view_verts[i][1]);
-
 	}
 
 	//boundrayBox check
@@ -211,7 +217,7 @@ void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline,floa
 			zbuffer[int(p.x + p.y * pipline.width)] = frag_depth;
 
 			// fragment shader
-			bool discard = shader.fragment(bar, color);
+			bool discard = shader.fragment(bar, color, view_verts);
 			if (!discard)
 			{
 			   unsigned char c[3];

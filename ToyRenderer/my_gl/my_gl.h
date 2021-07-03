@@ -19,5 +19,6 @@ void set_color(unsigned char* framebuffer, int x, int y, unsigned char color[], 
 
 float smoothstep(float edge0, float edge1, float x);
 TGAColor lerp(TGAColor a, TGAColor b, float value);
+float lerp(float a, float b, float value);
 
 void rasterize_triangle(vec4* clip_verts, IShader& shader,Pipeline& pipline, float* zbuffe, bool is_skybox = 0 );

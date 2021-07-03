@@ -101,8 +101,7 @@ vec3 Model::vert(int iface, int nvert) {
 }
 
 vec2 Model::uv(int iface, int nvert) {
-    int idx = faces_[iface][nvert][1];
-    return vec2(uvs_[idx].x * diffusemap_.get_width(), uvs_[idx].y * diffusemap_.get_height());
+    return uvs_[faces_[iface][nvert][1]];
 }
 
 vec3 Model::normal(int iface, int nvert) {
@@ -122,12 +121,13 @@ void Model::load_texture(std::string filename, const char* suffix, TGAImage& img
 }
 
 TGAColor Model::diffuse(vec2 uv){
-    return diffusemap_.get(uv[0],uv[1]);
+
+    return diffusemap_.get(uv[0] * diffusemap_.get_width(), uv[1] * diffusemap_.get_height());
 }
 
 double Model::specular(vec2 uv)
 {
-    return specularmap_.get(uv[0], uv[1])[0];
+    return specularmap_.get(uv[0] * specularmap_.get_width(), uv[1] * specularmap_.get_height())[0];
 }
 
 TGAColor Model::cubemap(int index, vec2 uv)
@@ -136,18 +136,18 @@ TGAColor Model::cubemap(int index, vec2 uv)
     uv[1] = fmod(uv[1], 1);
     float uv_1 = uv.x* cubemap_[index].get_width();
     float uv_2 = uv.y* cubemap_[index].get_height();
-    return cubemap_[index].get(uv_1,uv_2);
+    return cubemap_[index].get(uv_1 * cubemap_[index].get_width(),uv_2 * cubemap_[index].get_height());
 }
 
 vec3 Model::tangent_normal(vec2 uv){
     //纹理取值（0，1） 法线（ - 1，1） 需要变换一下 normal = color * 2 - 1
-    TGAColor color = tangentNormalmap_.get(uv[0], uv[1]);
+    TGAColor color = tangentNormalmap_.get(uv[0] * tangentNormalmap_.get_width(), uv[1] * tangentNormalmap_.get_height());
     vec3 tangent_normal(color[2]/255.*2.f-1.,color[1]/255.*2.-1.,color[0]/255.*2.-1.);
     return tangent_normal;
 }
 
 vec3 Model::normal(vec2 uv) {
-    TGAColor color =  normalmap_.get(uv[0], uv[1]);
+    TGAColor color =  normalmap_.get(uv[0] * normalmap_.get_width(), uv[1] * normalmap_.get_height());
     vec3 normal;
     normal[0] = color[2] / 255. * 2 - 1;
     normal[1] = color[1] / 255. * 2 - 1;

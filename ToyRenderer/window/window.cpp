@@ -1,8 +1,14 @@
 #include"window.h"
 
+wchar_t text1[] = L"L_Button : rotate";
+wchar_t text2[] = L"R_Button : move";
+wchar_t text3[] = L"Wheel     : zoom";
+wchar_t text4[] = L"Tab         : change model";
+wchar_t text5[] = L"Ctrl         : on/off shadow(has problem)";
+wchar_t text6[] = L"Shift       : on/off skybox(not yet installed)";
+
 LRESULT CALLBACK
 WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 
 bool RenderWindow::InitWindowsApp(HINSTANCE instanceHandle, int show)
 {
@@ -104,14 +110,8 @@ int RenderWindow::Run(Pipeline& pipeline, Camera& camera)
 
 			CalculateFrameState(camera);
 
-			if (model_index == 0)
-			{
-				window_draw(current_pipeline.render_2(chdc));
-			}
-			else
-			{
-				window_draw(current_pipeline.render(chdc));
-			}
+			window_draw(current_pipeline.render(chdc,model_index,is_shadow,is_skybox));
+
 
 			//reset 
 			camera.wheel_delta = 0;
@@ -124,6 +124,16 @@ int RenderWindow::Run(Pipeline& pipeline, Camera& camera)
 
 void RenderWindow::window_display(){
 	hdc = GetDC(ghMainWnd);
+
+	SetTextColor(chdc,RGB(255,255,255));
+	SetBkMode(chdc,TRANSPARENT);
+	TextOut(chdc, 10, 0, text1, wcslen(text1));
+	TextOut(chdc, 10, 20, text2, wcslen(text2));
+	TextOut(chdc, 10, 40, text3, wcslen(text3));
+	TextOut(chdc, 10, 60, text4, wcslen(text4));
+	TextOut(chdc, 10, 80, text5, wcslen(text5));
+	TextOut(chdc, 10, 100, text6, wcslen(text6));
+
 	BitBlt(hdc, 0, 0, width, height, chdc, 0, 0, SRCCOPY);
 	ReleaseDC(ghMainWnd, hdc);
 }
