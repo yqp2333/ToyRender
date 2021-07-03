@@ -31,12 +31,11 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 
 
 ### 计划实现功能（開発予定）
- 
-2.SSAO  
-3.Sky Box   
-4.PBR  
-5.IBL  
-6.Clipping in Homogeneous Coordinates  
+1.SSAO  
+2.Sky Box   
+3.PBR  
+4.IBL  
+5.Clipping in Homogeneous Coordinates  
 
 
 ### 参考
