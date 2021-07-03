@@ -22,18 +22,17 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 8.Depth testing   
 9.Tangent space normal mapping  
 10.Perspective-Correct Interpolation  
-
+11.Movable Camera  
 ![1](https://user-images.githubusercontent.com/74462917/123964665-a3e3ef00-d9ee-11eb-934c-58418ac3bd56.png)
 
 ### 计划实现功能（開発予定）
 1.Shadow Mapping  
 2.SSAO  
-3.MSAA  
-4.Sky Box   
-5.PBR  
-6.IBL  
-7.Clipping in Homogeneous Coordinates  
-8.Movable Camera  
+3.Sky Box   
+4.PBR  
+5.IBL  
+6.Clipping in Homogeneous Coordinates  
+
 
 ### 参考
 1.GAMES101: 现代计算机图形学入门  
