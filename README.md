@@ -24,7 +24,9 @@ Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供
 10.Perspective-Correct Interpolation  
 11.Movable Camera  
 12.Shadow Mapping  
-![toyrenderer1](https://user-images.githubusercontent.com/74462917/124359974-2f18eb00-dc62-11eb-9c05-70b0fa9d5c0f.png)
+![toyrenderer1](https://user-images.githubusercontent.com/74462917/124359974-2f18eb00-dc62-11eb-9c05-70b0fa9d5c0f.png)  
+
+
 ![toyrenderer2](https://user-images.githubusercontent.com/74462917/124359975-304a1800-dc62-11eb-8f0a-f5f7d513fa42.png)
 
 
