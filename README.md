@@ -1,17 +1,15 @@
 # ToyRender(software renderer)
 
-### 简介（概要）  
-·为了更好的理解计算机图形学的相关知识和算法，也为了更有效率的学习图形学API，决定自己动手使用C++实现一个软渲染器。  
-·窗口显示基于Win32，使用了Dmitry V. Sokolov提供的数学计算和资源导入脚本。当前运行速度较慢...  
-·目前不断更新中...
-
+### 概要
 ·コンピュータグラフィックスに関する知識とアルゴリズムをよく理解でき、そして、グラフィックスAPIを効率的に勉強できるために、自分でC++を使って、software rendererを開発することを決めました。  
 ·Windowの表示はWin32APIに基づいて、そしてmitry V.Sokolovから提供される数学計算とリソース導入スクリプトを使用しているが、他のサードパーティライブラリを使用していないです。
 ·申し訳ございませんが、現在の運行速度はまだ遅くなっておりますので、ご了承ください。  
 ·現在更新と改善中…  
-　　
+　
+ ### 動画
+ https://youtu.be/ag_g_io9Qi0
 
-### 已实现功能（実装済み）
+### 実装済み
 1.UI Window  
 2.MVP Transformation  
 3.Triangle Rasterization（Bounding Box acceleration）  
@@ -30,7 +28,7 @@
 ![toyrenderer2](https://user-images.githubusercontent.com/74462917/124359975-304a1800-dc62-11eb-8f0a-f5f7d513fa42.png)
 
 
-### 计划实现功能（開発予定）
+### 開発予定
 1.SSAO  
 2.Sky Box   
 3.PBR  
